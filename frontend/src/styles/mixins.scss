@@ -1,0 +1,15 @@
+@mixin flex-dir($direction,$align,$justify){
+    display: flex;
+    flex-direction: $direction;
+    align-items: $align;
+    justify-content: $justify; 
+}
+
+$color-primary: #da512f;
+$color-secondary: #c94723;
+$color-tertiary: #912e12;
+$color-complementary: #2fb8da;
+
+$light-grey: #e4e4e4;
+$grey: #6e6e6e;
+$dark-grey: #333;
