@@ -21,12 +21,13 @@
             outline: none;
             border: none;
                 &:focus{
-                    border: 1px solid #ccc;
+                    border: 1px solid $color-complementary;
                 }   
         }
         .search-icon {
             position: absolute;
             left:10px;
+            color:$color-complementary;
         }
 
     }
@@ -49,8 +50,13 @@
                 background-color: $light-grey;
                 font-size: 25px;
                 margin: 10px;
+                cursor: pointer;
                 .fa-user-edit{
                     margin-left: 5px;
+                }
+                &:active{
+                    background-color: $color-primary;
+                    color: $light-grey;
                 }
             }
             .nav-active {

@@ -13,7 +13,7 @@ const Header = () => {
                 <nav className="nav-right">
                     <ul className='nav-list'>
                         <li><NavLink to="/" className={(nav) => (nav.isActive ? "nav-active" : "")} ><i class="fas fa-home"></i></NavLink></li>
-                        <li><i class="far fa-comments"></i></li>
+                        <li><NavLink to="/messages" className={(nav) => (nav.isActive ? "nav-active" : "")} ><i class="far fa-comments"></i></NavLink></li>
                         <li><i class="fas fa-bell"></i></li>
                         <li><NavLink to="/account" className={(nav) => (nav.isActive ? "nav-active" : "")}><i class="fas fa-user-edit"></i></NavLink></li>
                     </ul>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function Login() {
     const [isActive, setActive] = useState("false");
@@ -7,16 +8,74 @@ function Login() {
         setActive(!isActive);
       };
 
+      const [email, setEmail] = useState("");
+      const [password, setPassword] = useState("");
+      const [nom, setNom] = useState("");
+      const [prenom, setPrenom] = useState("");
+
+      const handleSignup = (e) => {
+        e.preventDefault();
+        console.log(email, password, nom, prenom);
+
+        axios({
+          method: "POST",
+          url: "http://localhost:3500/api/auth/signup",
+          data: {
+            email: email,
+            password: password,
+            nom: nom,
+            prenom: prenom,
+          },
+        })
+
+      };
+      const handleLogin = (e) => {
+        e.preventDefault();
+
+        const emailError = document.getElementById("emailError");
+        const passwordError = document.getElementById("passwordError");
+
+        axios({
+          method: "POST",
+          url: "http://localhost:3500/api/auth/login",
+          data: {
+            email: email,
+            password: password,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          if (res.error) {
+          console.log(res);
+            emailError.innerHTML = res.errors;
+            passwordError.innerHTML = res.data.message;
+          } else {
+            window.location.href = "/";
+            console.log(res)
+          }
+
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+
+      };
+
+  
+
   return (
     <div className="mainContainer">
       <div className={`bgContainer ${isActive ? "" : "blured"}`}>
         <img src="./ressources/icon-above-font.png" alt="" />
         <div className="loginContainer">
-          <form action="">
-            <label for=""> Email </label>
-            <input type="text" placeholder="Email" />
-            <label for=""> Mot de passe </label>
-            <input type="password" placeholder="Password" />
+          <form action="" onSubmit={handleLogin}>
+            <label> Email </label>
+            <input type="text" placeholder="Email" name="email" id="email"  onChange={(e) =>setEmail(e.target.value)}/>
+            <div className="email-error" id="emailError"></div>
+            <label > Mot de passe </label>
+            <input type="password" placeholder="Password" name="password" onChange={(e) =>setPassword(e.target.value)}/>
+            <div className="password-error" id="passwordError"></div>
+
 
             <button type="submit">Login</button>
           </form>
@@ -37,21 +96,21 @@ function Login() {
       
         <div className="signupPopupContainer">
           <h2>Inscription</h2>
-          <form action="">
+          <form action="" onSubmit={handleSignup}>
             <div className="headerpopup">
-              <label for="Nom"></label>
-              <input type="text" placeholder="Nom" />
-              <label for="Prenom"></label>
-              <input type="text" placeholder="Prenom" />
+              <label htmlFor="Nom"></label>
+              <input type="text" placeholder="Nom" name="nom" id="nom" onChange={(e) =>setNom(e.target.value)}/>
+              <label htmlFor="Prenom"></label>
+              <input type="text" placeholder="Prenom" name="prenom" id="prenom" onChange={(e) =>setPrenom(e.target.value)}/>
             </div>
 
-            <label for=""> Email </label>
-            <input type="text" placeholder="Email" />
-            <label for=""> Mot de passe </label>
-            <input type="password" placeholder="Mot de passe" />
-            <label for=""> Confirmer le mot de passe </label>
-            <input type="password" placeholder=" Confirmer le mot de passe" />
-            <button type="submit">S'inscrire</button>
+            <label> Email </label>
+            <input type="text" placeholder="Email" name="email" onChange={(e) =>setEmail(e.target.value)} />
+            <label > Mot de passe </label>
+            <input type="password" placeholder="Mot de passe" name="password1" onChange={(e) =>setPassword(e.target.value)}/>
+            {/* <label for=""> Confirmer le mot de passe </label>
+            <input type="password" placeholder=" Confirmer le mot de passe" name="password2" /> */}
+            <input type="submit" className="submitSignup" value="S'inscrire" />
           </form>
         </div>
       </div>
