@@ -11,12 +11,10 @@ module.exports = (req,res,next) => {
         if (req.body.userId && req.body.userId !== userId) {
             throw 'UserId non valide!';
         } else {
-            // console.log('UserId valide!');
+            console.log('UserId valide!');
             next();
         }
     } catch {
-        res.status(401).json({
-            error: new Error('Requête invalide !')
-        });
+        res.status(401).json({error: 'Requête invalide, non autorisé !'});
     }
 };

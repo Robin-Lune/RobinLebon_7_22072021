@@ -21,7 +21,7 @@ function Login() {
     emailError.innerHTML = '';
     
 
-    axios({
+  axios({
       method: "POST",
       url: "http://localhost:3500/api/auth/signup",
       data: {
@@ -31,9 +31,8 @@ function Login() {
         prenom: prenom,
       },
     }) .then((res) => {
-      console.log(res.data);
-      // window.location.href = "/";
-      // localStorage.token = JSON.stringify(res.data);
+      localStorage.token = JSON.stringify(res.data);
+      window.location.href = "/";    
     })
     .catch((err) => {
       if (err.response.data.message) {
