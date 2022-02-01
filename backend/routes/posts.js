@@ -5,11 +5,12 @@ const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config')
 
 router.get("/", auth, postsCtrl.getAllPosts);
-router.post("/", auth, multer,postsCtrl.createPost);
-// router.get("/:id", auth, sauceCtrl.getOneSauce);
+router.post("/", auth,multer,postsCtrl.createPost);
+router.get("/:id", auth, postsCtrl.getOnePostComments);
 // router.put("/:id", auth, multer, sauceCtrl.modifySauce);
 // router.delete("/:id", auth, sauceCtrl.deleteSauce);
-// router.post('/:id/like', auth, sauceCtrl.likeSauce);
+ router.get('/:id/like', auth, postsCtrl.getLikePost);
+ router.post('/:id/like', auth, postsCtrl.likePost);
 
 
 

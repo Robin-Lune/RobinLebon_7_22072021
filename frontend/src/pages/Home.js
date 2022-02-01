@@ -8,13 +8,17 @@ const Home = () => {
     getPosts();
   }, []);
   const [message, setMessage] = useState("");
-  let [file, setFile] = useState();
+  const [file, setFile] = useState();
   const [posts, setPosts] = useState([]);
-// Call API to get posts
+
+
+// Set header Authorization with the token in the local storage
 if (localStorage.token) {
     let token = JSON.parse(localStorage.token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
   }
+
+  // Call API to get posts
   const getPosts = async () => {
     
 
@@ -37,7 +41,7 @@ const shwImage = document.getElementById('image-container');
 
 const pictureLoad = (e) => {
     const efile = e.target.files[0];
-    setFile = e.target.files[0];
+    setFile(efile);
     const reader = new FileReader();
     reader.onload = function(e) {
         const dataUrl = e.target.result;
@@ -57,25 +61,27 @@ const pictureLoad = (e) => {
 const handlePost = async (e) => {
     e.preventDefault();
     let token = JSON.parse(localStorage.token);
-    console.log(file);
+    if (file) console.log(file);
+    console.log(message)
     const data = new FormData();
-
-    if (file) data.append('file', file);
+    if (file) data.append('image', file);
     data.append('message', message);
-    data.append("userId", token.userId);
-     await axios({
-        method: "POST",
-        url: "http://localhost:3500/api/posts/",
-        data,
-        
-        })
-        .then((res) => {
-            console.log(res);
-            //   window.location.href = "/"; //this is for redirecting to home page
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    data.append('userId', token.userId);
+
+
+    await axios({
+      method: "POST",
+      url: "http://localhost:3500/api/posts/",
+      data,
+      })
+      .then((res) => {
+          console.log(res);
+            window.location.href = "/"; //this is for redirecting to home page
+      })
+      .catch((err) => {
+          console.log(err.response);
+      });
+
     
         
   };
@@ -96,7 +102,7 @@ const handlePost = async (e) => {
                     <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${nom}`} onChange={(e) => setMessage(e.target.value)}/>
                 </div>
                 <div className="poster-footer">
-                    <input type="file" id="imageUpload" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad} />
+                    <input type="file" id="imageUpload" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad}  />
                     <div id="image-container"></div>
                 </div>
                 <input type="submit" id="submit-post" />
@@ -106,11 +112,14 @@ const handlePost = async (e) => {
 
         {posts.map((post) => (
           <Postes
-            key={post.id}
-            id={post.datecreation}
+            key={post.datecreation}
+            id={post.id}
             image={post.imageurl}
             message={post.message}
             date={post.datecreation}
+            u_id={post.utilisateur_id}
+            author={`${post.nom} ${post.prenom}`}
+            authorPicture={post.imageProfile}
           />
         ))}
       </div>

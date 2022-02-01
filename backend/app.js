@@ -1,7 +1,7 @@
 const express = require('express');
 const postsRoutes = require('./routes/posts');
 const userRoutes = require('./routes/user');
-// const path = require('path');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 });
 
 
-// app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use('/api/posts', postsRoutes);
 app.use('/api/auth', userRoutes);
 

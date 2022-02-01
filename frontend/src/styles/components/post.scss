@@ -1,0 +1,141 @@
+.post {
+  @include flex-dir(column, flex-start, center);
+  background-color: rgba(226, 150, 79, 0.6);
+  max-width: 550px;
+  width: 60vw;
+  min-width: 370px;
+  min-height: 100px;
+  border-radius: 10px;
+  margin: 20px 0 20px 0;
+  padding: 15px;
+}
+
+.post-header {
+  @include flex-dir(row, center, flex-start);
+  flex: 1;
+  width: 100%;
+  margin: 0 0 10px 0;
+  .profil-picture {
+    border-radius: 50%;
+    height: 40px;
+    min-width: 40px;
+    margin: 0 10px 0 0;
+  }
+  .exif-data {
+    @include flex-dir(column, flex-start, center);
+    height: 40px;
+    width: 100%px;
+    color: $light-grey;
+  }
+  .author {
+    font-size: 14px;
+    font-weight: bold;
+    color: $dark-grey;
+  }
+  .date {
+    font-size: 12px;
+    color: $dark-grey;
+  }
+}
+
+.post-body {
+  @include flex-dir(column, flex-start, center);
+  width: 100%;
+  height: 100%;
+  color: black;
+
+  .post-message {
+    color: $dark-grey;
+    font-size: 20px;
+    margin: 0 0 10px 0;
+  }
+  .post-image {
+    height: auto;
+    width: 100%;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+}
+
+.post-footer{
+    @include flex-dir(column, flex-start, center);
+    width: 100%;
+
+.like-comment{
+    @include flex-dir(row, center, center);
+    .like{
+        @include flex-dir(row, center, center);
+        height: 100%;
+        width: 60px;
+        padding: 10px;
+        transition: all 0.2s ease-in-out;
+        border-radius: 10px;
+        margin: 0 5px;
+        cursor: pointer;
+        .fa-heart{
+            // font-size: 20px;
+            color: $color-secondary;
+            height: 20px;
+            width: 20px;
+            margin:5px;
+           
+        }
+        .like-count{
+            font-size: 14px;
+            color: $dark-grey;
+            margin: 5px;
+            display: block;
+        }
+        .inactive{
+            display: none;
+        }
+        &:hover{
+            background-color:  $color-secondary;
+            .fa-heart{
+                    color:  $color-tertiary;
+                }
+        }
+        .icon-container{
+            display: block;
+        }
+    }
+  
+    .comment{
+        @include flex-dir(row, center, center);
+        height: 100%;
+        width: 60px;
+        padding: 10px;
+        margin: 0 5px;
+        transition: all 0.2s ease-in-out;
+        border-radius: 10px;
+        cursor: pointer;
+        .fa-comment{
+            // font-size: 20px;
+            color:  $color-secondary;
+            
+            height: 20px;
+            width: 20px;
+            margin:5px;
+
+        }
+        .comment-count{
+            font-size: 14px;
+            color: $dark-grey;
+            margin: 5px;
+            display: block;
+        }
+        .comment-count-inactive{
+            display: none;
+        }
+        &:hover{
+            background-color:  $color-secondary;
+            .fa-comment{
+                    color:  $color-tertiary;
+                
+            }
+        }
+    }
+}
+
+    
+}

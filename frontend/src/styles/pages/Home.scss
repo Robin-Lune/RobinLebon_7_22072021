@@ -1,4 +1,5 @@
 @import "../components/header.scss";
+@import "../components/post.scss";
 
 .home-container {
   @include flex-dir(column, center, center);

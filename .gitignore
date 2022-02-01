@@ -6,6 +6,10 @@
 
 # testing
 /coverage
+images/*
+!images/.gitkeep
+!images/posts/.gitkeep
+!images/profils/.gitkeep
 
 # production
 /build

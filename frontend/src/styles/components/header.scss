@@ -3,6 +3,9 @@
     height: 70px;
     @include flex-dir(row,center,space-between);
     border-bottom: 1px solid #bbbbbb;
+    position: sticky;
+    top: 0;
+    background-color: rgb(241, 241, 241);
 
     img{
         height: 100%;
