@@ -23,6 +23,17 @@ exports.getOnePostComments = (req, res, next) => {
     res.status(200).json(result);
   });
 };
+exports.getOnePost = (req, res, next) => {
+  const postId = req.params.id;
+  const sql = `SELECT * FROM posts WHERE post_id =  ${postId};`;
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.status(404).json({ err });
+      throw err;
+    }
+    res.status(200).json(result);
+  });
+};
 
 
 

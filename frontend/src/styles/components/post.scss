@@ -11,8 +11,7 @@
 }
 
 .post-header {
-  @include flex-dir(row, center, flex-start);
-  flex: 1;
+  @include flex-dir(row, center, space-between);
   width: 100%;
   margin: 0 0 10px 0;
   .profil-picture {
@@ -20,6 +19,12 @@
     height: 40px;
     min-width: 40px;
     margin: 0 10px 0 0;
+  }
+  .post-header-left{
+  @include flex-dir(row, center, flex-start);
+  }
+  .post-header-right{
+    cursor: pointer;
   }
   .exif-data {
     @include flex-dir(column, flex-start, center);
@@ -86,9 +91,7 @@
             margin: 5px;
             display: block;
         }
-        .inactive{
-            display: none;
-        }
+      
         &:hover{
             background-color:  $color-secondary;
             .fa-heart{
@@ -138,4 +141,8 @@
 }
 
     
+}
+
+.inactive{
+    display: none;
 }

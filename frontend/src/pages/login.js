@@ -31,7 +31,8 @@ function Login() {
         prenom: prenom,
       },
     }) .then((res) => {
-      localStorage.token = JSON.stringify(res.data);
+      console.log(res.data);
+      alert('Votre compte a été créé avec succès');
       window.location.href = "/";    
     })
     .catch((err) => {
