@@ -2,26 +2,24 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/header";
 import axios from "axios";
 import Postes from "../components/post";
+import Poster from "../components/poster";
 
 const Home = () => {
   useEffect(() => {
+    getUser();
     getPosts();
   }, []);
-  const [message, setMessage] = useState("");
-  const [file, setFile] = useState();
   const [posts, setPosts] = useState([]);
+  const [user, setUser] = useState([]);
 
-
-// Set header Authorization with the token in the local storage
-if (localStorage.token) {
+  // Set header Authorization with the token in the local storage
+  if (localStorage.token) {
     let token = JSON.parse(localStorage.token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
   }
 
   // Call API to get posts
   const getPosts = async () => {
-    
-
     await axios({
       method: "GET",
       url: "http://localhost:3500/api/posts/",
@@ -34,72 +32,35 @@ if (localStorage.token) {
         window.location.href = "/login";
       });
   };
-
-
-// upload image and visuaize it
-const shwImage = document.getElementById('image-container');
-
-const pictureLoad = (e) => {
-    const efile = e.target.files[0];
-    setFile(efile);
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const dataUrl = e.target.result;
-        const img = document.createElement('img');
-        if (document.getElementById('my-image')) {
-            shwImage.removeChild(document.getElementById('my-image'));
-        }
-        img.id = 'my-image';
-        img.src = dataUrl;
-        shwImage.appendChild(img);
-    }
-    reader.readAsDataURL(efile);
-
-};
-
-//  save Post in database
-const handlePost = async (e) => {
-    e.preventDefault();
-    let token = JSON.parse(localStorage.token);
-    if (file) console.log(file);
-    console.log(message)
-    const data = new FormData();
-    if (file) data.append('image', file);
-    data.append('message', message);
-    data.append('userId', token.userId);
-
-
+  //get User infos
+  const getUser = async () => {
+    const token = JSON.parse(localStorage.token);
     await axios({
-      method: "POST",
-      url: "http://localhost:3500/api/posts/",
-      data,
-      })
+      method: "GET",
+      url: `http://localhost:3500/api/auth/${token.userId}`,
+    })
       .then((res) => {
-          console.log(res);
-            window.location.href = "/"; //this is for redirecting to home page
+        console.log(res.data[0]);
+        setUser(res.data[0]);
       })
       .catch((err) => {
-          console.log(err.response);
+        console.log(err.response);
       });
-
-    
-        
   };
 
-  const nom = 'Robin'; 
 
   return (
     <div>
       {/* {localStorage.token ? <Header /> <Postes /> : <div>Vous n'êtes pas connecté</div>} */}
       <Header />
       <div className="home-container">
-        <div className="poster">
+        {/* <div className="poster">
             <form action="" onSubmit={handlePost}> 
                 <div className="poster-header">
                     <div className="profil-picture">
                         <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profil"/>
                     </div>
-                    <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${nom}`} onChange={(e) => setMessage(e.target.value)}/>
+                    <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${user.prenom}`} onChange={(e) => setMessage(e.target.value)}/>
                 </div>
                 <div className="poster-footer">
                     <input type="file" id="imageUpload" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad}  />
@@ -107,11 +68,14 @@ const handlePost = async (e) => {
                 </div>
                 <input type="submit" id="submit-post" />
             </form>
-        </div>
+        </div> */}
 
+        <Poster infos={user}  />
+    
 
         {posts.map((post) => (
           <Postes
+
             key={post.datecreation}
             id={post.id}
             image={post.imageurl}
@@ -120,6 +84,7 @@ const handlePost = async (e) => {
             u_id={post.utilisateur_id}
             author={`${post.nom} ${post.prenom}`}
             authorPicture={post.imageProfile}
+            admin={user.admin}
           />
         ))}
       </div>

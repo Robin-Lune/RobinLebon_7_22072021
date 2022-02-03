@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import axios from "axios";
 
-const Post = ({ id, image, message, date, author, authorPicture,u_id }) => {
+const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) => {
   useEffect(() => {
     getComments();
     getLikes();
@@ -118,7 +118,7 @@ const Post = ({ id, image, message, date, author, authorPicture,u_id }) => {
             </div>
         </div>
 
-          <div className={`post-header-right ${u_id === userId ? "active" : "inactive"}`}>
+          <div className={`post-header-right ${u_id === userId || admin === 1 ? "active" : "inactive"}`}>
             <i className="fas fa-ellipsis-h"></i>
           </div>
 

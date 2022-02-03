@@ -66,3 +66,13 @@ exports.login = (req, res, next) => {
     }
   });
 };
+
+
+exports.getUser = (req, res, next) => {
+  const userId = req.params.id;
+  const sql = `SELECT nom, prenom, imageprofile , admin FROM utilisateur WHERE id=${userId}`;
+  let query = db.query(sql, (err, result) => {
+    if (err) throw err;
+    res.status(200).json(result);
+  });
+}
