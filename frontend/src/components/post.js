@@ -1,55 +1,70 @@
 import React, { useEffect, useState } from "react";
+import { timePassed } from "../Utils/utils";
 
 import axios from "axios";
+import Comments from "./comments";
 
-const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) => {
+const Post = ({
+  id,
+  image,
+  message,
+  date,
+  author,
+  authorPicture,
+  u_id,
+  admin,
+  totalLikes,
+  totalComm,
+  dateComm,
+  lastComm,
+  Comm_nom,
+  Comm_prenom,
+  Comm_picture,
+  Comm_uid,
+  infos,
+}) => {
   useEffect(() => {
-    getComments();
+    setLikes(totalLikes);
+    setNumberComments(totalComm);
     getLikes();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const [likes, setLikes] = useState();
-  const [comments, setComments] = useState();
   const token = JSON.parse(localStorage.token);
   const userId = token.userId;
+  const postId = id;
   const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState();
+  const [showComment, setShowComment] = useState(false);
+  const [numberComments, setNumberComments] = useState(totalComm);
+  const [comments, setComments] = useState([]);
+  const [commentForm, setCommentForm] = useState("");
 
-  //time passed from date to now
-  const timePassed = (date) => {
-    const today = new Date();
-    const todayDate = today.getTime();
-    const postDate = new Date(date).getTime();
-    const diff = todayDate - postDate;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor(diff / (1000 * 60));
-    const seconds = Math.floor(diff / 1000);
-    if (days > 0) {
-      if (days === 1) {
-        return `il y a ${days} jour`;
-      } else {
-        return `il y a ${days} jours`;
-      }
-    } else if (hours > 0) {
-      if (hours === 1) {
-        return `il y a ${hours} heure`;
-      } else {
-        return `il y a ${hours} heures`;
-      }
-    } else if (minutes > 0) {
-      if (minutes === 1) {
-        return `il y a ${minutes} minute`;
-      } else {
-        return `il y a ${minutes} minutes`;
-      }
-    } else {
-      return `il y a ${seconds} secondes`;
-    }
+  //toggler 
+  const toggleShowComment = (id) => {
+    setShowComment(!showComment);
+    getComments(lastComm);
+    // console.log("Show = " + showComment);
+  };
+
+  const getLikes = async () => {
+    await axios({
+      method: "GET",
+      url: `http://localhost:3500/api/posts/${postId}/like`,
+    })
+      .then((res) => {
+        for (let i = 0; i < res.data.length; i++) {
+          if (res.data[i].lp_utilisateur_id === userId) {
+            setLiked(true);
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
   //on click on like button add like to the post
   const handleLike = async () => {
-    const postId = id;
     const userId = token.userId;
     await axios({
       method: "POST",
@@ -60,24 +75,31 @@ const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) =>
       },
     })
       .then((res) => {
-        // console.log(res);
+        console.log(res);
         getLikes();
         if (liked) {
           setLiked(false);
+          setLikes(likes - 1);
         } else {
           setLiked(true);
+          setLikes(likes + 1);
         }
-        // window.location.href = "/"; //this is for redirecting to home page
+        // window.location.href = "/";
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
 
+
   // get all comments of the post
-  const getComments = async () => {
+  const getComments = async (lastComm) => {
+    if (lastComm === null) {
+      return;
+    }
+
     await axios
-      .get(`http://localhost:3500/api/posts/${id}`)
+      .get(`http://localhost:3500/api/posts/${postId}/comments`)
       .then((res) => {
         // console.log(res.data);
         setComments(res.data);
@@ -87,42 +109,54 @@ const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) =>
       });
   };
 
-  // get all likes of the post
-  const getLikes = async () => {
-    await axios
-      .get(`http://localhost:3500/api/posts/${id}/like`)
+  //add comment to the post
+  const sendComment = async (e) => {
+
+    e.preventDefault();
+ 
+    await axios({
+      method: "POST",
+      url: `http://localhost:3500/api/posts/${id}/comments`,
+      data: {
+        postId,
+        userId,
+        commentaire: commentForm,
+      },
+    })
       .then((res) => {
-        for (let i = 0; i < res.data.length; i++) {
-          //   console.log(res.data[i].lp_utilisateur_id);
-          if (res.data[i].lp_utilisateur_id === userId) {
-            setLiked(true);
-          }
-        }
-        setLikes(res.data);
-        // console.log(liked);
+        // console.log(res);
+        setCommentForm("");
+        setNumberComments(numberComments + 1);
+        getComments();
+
       })
       .catch((err) => {
         console.log(err.response);
       });
+    // console.log (commentForm)
   };
+
+        
+      
 
   return (
     <div className={`post data-id="${id}`}>
       <div className="post-header">
-
         <div className="post-header-left">
           <img src={authorPicture} alt="" className="profil-picture" />
           <div className="exif-data">
             <p className="author">{author}</p>
             <p className="date">{timePassed(date)}</p>
-            </div>
+          </div>
         </div>
 
-          <div className={`post-header-right ${u_id === userId || admin === 1 ? "active" : "inactive"}`}>
-            <i className="fas fa-ellipsis-h"></i>
-          </div>
-
-        
+        <div
+          className={`post-header-right ${
+            u_id === userId || admin === 1 ? "active" : "inactive"
+          }`}
+        >
+          <i className="fas fa-ellipsis-h"></i>
+        </div>
       </div>
 
       <div className="post-body">
@@ -132,11 +166,12 @@ const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) =>
 
       <div className="post-footer">
         <div className="like-comment">
-          <div className="like">
-            {/* <p className={`like-count  ${liked ? "" : "inactive"}`} >{likes.length}</p> */}
+          <div className="like-container">
+            <p className={`like-count  ${likes > 0 ? "" : "inactive"}`}>
+              {likes}
+            </p>
             <div
               className={`icon-cointainer ${liked ? "inactive" : ""}`}
-              onClick={handleLike}
               onClick={handleLike}
             >
               <i class="far fa-heart like-icon"></i>
@@ -144,16 +179,75 @@ const Post = ({ id, image, message, date, author, authorPicture,u_id,admin }) =>
             <div
               className={`icon-cointainer ${liked ? "" : "inactive"}`}
               onClick={handleLike}
-              onClick={handleLike}
             >
               <i className="fas fa-heart like-icon"></i>
             </div>
           </div>
-          <div className="comment">
-            {/* <p className={`comment-count  ${comments.length === 0 ? "inactive" : ""}`}>{comments.length}</p> */}
+          <div className="comment-container" onClick={toggleShowComment}>
+            <p className={`comment-count  ${totalComm > 0 ? "" : "inactive"}`}>
+              {numberComments}
+            </p>
             <i className="far fa-comment"></i>
           </div>
         </div>
+        <hr />
+        {/* LAST COMM SECTION */}
+        {lastComm != null && showComment === false ? (
+          // comments list
+          <div className="comment-section">
+            <div className="comment">
+              <div className="comment-header">
+                <div className="comment-header-left">
+                  <img src={Comm_picture} alt="" className="profil-picture" />
+
+                  <div className="exif-data">
+                    <p className="author">{`${Comm_nom} ${Comm_prenom}`}</p>
+                    <p className="date">{timePassed(dateComm)}</p>
+                  </div>
+                </div>
+                <div className={`comment-header-right ${
+            Comm_uid === userId || admin === 1 ? "active" : "inactive"
+          }`}>
+                  <i className="fas fa-ellipsis-h"></i>
+                </div>
+              </div>
+              <p className="comment-message">{lastComm}</p>
+            </div>
+          </div>
+        ) : ( 
+          ""
+        )}
+
+        {/* COMMENTS SECTION */}
+        {showComment ? (
+          <form action="" className="form-comment" onSubmit={sendComment}>
+            <img src={infos.imageprofile} alt="image de profile utilisateur" className="profil-picture" />
+            <input type="text" placeholder="Ajouter un commentaire" className="add-comment" onChange={(e) => setCommentForm(e.target.value)} id="input-comment" /> 
+            <button className="add-comment-button" disabled={commentForm === ""}  >
+              <i className="fas fa-paper-plane"></i>
+            </button>
+          </form>
+
+        ) : ""}
+
+        {showComment
+          ?       
+            comments.map((comment) => (
+              
+              <Comments
+                key = {comment.datecreation_comm}
+                commentaire={comment.commentaire}
+                nom={comment.nom}
+                prenom={comment.prenom}
+                picture={comment.imageProfile}
+                date={comment.datecreation_comm}
+                comm_uId = {comment.utilisateur_id}
+                userId = {userId}
+                admin = {admin}
+                id = {comment.comm_id}
+              />
+            ))
+          : ""}
       </div>
     </div>
   );

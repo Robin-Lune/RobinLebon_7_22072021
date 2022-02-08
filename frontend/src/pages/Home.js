@@ -7,8 +7,8 @@ import Poster from "../components/poster";
 const Home = () => {
   useEffect(() => {
     getUser();
-    getPosts();
-  }, []);
+    getAllPosts();
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
 
@@ -18,20 +18,21 @@ const Home = () => {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token.token}`;
   }
 
-  // Call API to get posts
-  const getPosts = async () => {
-    await axios({
-      method: "GET",
-      url: "http://localhost:3500/api/posts/",
+  // Call API to get ALL posts
+const getAllPosts = async () => { 
+  await axios({
+    method: "GET",
+    url: "http://localhost:3500/api/posts/",
+  })
+    .then((res) => {
+      setPosts(res.data);
+      console.log(posts);
     })
-      .then((res) => {
-        setPosts(res.data);
-        console.log(posts);
-      })
-      .catch((err) => {
-        window.location.href = "/login";
-      });
-  };
+    .catch((err) => {
+      window.location.href = "/login";
+    });
+};
+
   //get User infos
   const getUser = async () => {
     const token = JSON.parse(localStorage.token);
@@ -48,30 +49,16 @@ const Home = () => {
       });
   };
 
-
+ 
   return (
     <div>
       {/* {localStorage.token ? <Header /> <Postes /> : <div>Vous n'êtes pas connecté</div>} */}
       <Header />
       <div className="home-container">
-        {/* <div className="poster">
-            <form action="" onSubmit={handlePost}> 
-                <div className="poster-header">
-                    <div className="profil-picture">
-                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profil"/>
-                    </div>
-                    <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${user.prenom}`} onChange={(e) => setMessage(e.target.value)}/>
-                </div>
-                <div className="poster-footer">
-                    <input type="file" id="imageUpload" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad}  />
-                    <div id="image-container"></div>
-                </div>
-                <input type="submit" id="submit-post" />
-            </form>
-        </div> */}
+       
 
         <Poster infos={user}  />
-    
+      
 
         {posts.map((post) => (
           <Postes
@@ -85,7 +72,16 @@ const Home = () => {
             author={`${post.nom} ${post.prenom}`}
             authorPicture={post.imageProfile}
             admin={user.admin}
-          />
+            totalLikes={post.total_like}
+            totalComm = {post.total_comm}
+            dateComm = {post.datecreation_comm}   
+            lastComm = {post.commentaire}         
+            Comm_nom = {post.comm_nom} 
+            Comm_prenom = {post.comm_prenom}
+            Comm_picture = {post.comm_picture} 
+            Comm_uid = {post.comm_uid}
+            infos={user}
+          /> 
         ))}
       </div>
     </div>

@@ -4,4 +4,7 @@
 
 .home-container {
   @include flex-dir(column, center, center);
+  margin: auto;
+  width: 100%;
+  height: 100%;
 }

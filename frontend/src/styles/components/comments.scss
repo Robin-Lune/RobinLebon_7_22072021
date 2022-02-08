@@ -1,0 +1,60 @@
+.comment-section{
+    @include flex-dir(column, flex-start, center);
+    width: 100%;
+    height: auto;
+
+    .comment {
+      @include flex-dir(column, flex-start, center);
+      background-color: rgba(221, 175, 132, 0.6);
+      max-width: 540px;
+      width: 90%;
+      min-width: 370px;
+      min-height: 100px;
+      border-radius: 10px;
+      margin: 20px auto 20px auto;
+      padding: 15px;
+      white-space: initial;
+      overflow-wrap: break-word;
+
+    }
+
+    .comment-header {
+      @include flex-dir(row, center, space-between);
+      width: 100%;
+      margin: 0 0 10px 0;
+      .profil-picture {
+        border-radius: 50%;
+        height: 40px;
+        min-width: 40px;
+        margin: 0 10px 0 0;
+      }
+      .comment-header-left {
+        @include flex-dir(row, center, flex-start);
+      }
+      .comment-header-right {
+        cursor: pointer;
+      }
+      .exif-data {
+        @include flex-dir(column, flex-start, center);
+        height: 40px;
+        width: 100%px;
+        color: $light-grey;
+      }
+      .author {
+        font-size: 14px;
+        font-weight: bold;
+        color: $dark-grey;
+      }
+      .date {
+        font-size: 12px;
+        color: $dark-grey;
+      }
+    }
+
+  }
+
+  .comment-message{
+    width: 100%;
+    white-space: initial;
+    overflow-wrap: break-word;
+  }
