@@ -26,7 +26,10 @@
     @include flex-dir(row, center, flex-start);
   }
   .post-header-right {
-    cursor: pointer;
+    position: relative;
+    .fa-ellipsis-h{
+      cursor:pointer;
+    }
   }
   .exif-data {
     @include flex-dir(column, flex-start, center);
@@ -43,6 +46,34 @@
     font-size: 12px;
     color: $dark-grey;
   }
+}
+
+.options {
+  @include flex-dir(column, center, space-around);
+  position: absolute;
+  width: 120px;
+  height: 65px;
+  margin: 0 0 10px 0;
+  border-radius: 5px;
+  background-color: rgba(221, 175, 132, .98);
+  font-weight: bold;
+  top :20px ;
+  right: 0;
+  z-index: 100;
+  .delete{
+    color: red;
+    cursor: pointer;
+    &:hover{
+      color: rgb(212, 25, 25);
+    }
+  }
+  
+}
+.-comm{
+  height: 50px;
+  top: -15px;
+  right: 20px;
+
 }
 
 .post-body {
@@ -179,7 +210,10 @@
       @include flex-dir(row, center, flex-start);
     }
     .comment-header-right {
-      cursor: pointer;
+      position: relative;
+    .fa-ellipsis-h{
+      cursor:pointer;
+    }
     }
     .exif-data {
       @include flex-dir(column, flex-start, center);

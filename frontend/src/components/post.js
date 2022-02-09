@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { timePassed } from "../Utils/utils";
 
 import axios from "axios";
@@ -21,25 +21,60 @@ const Post = ({
   Comm_prenom,
   Comm_picture,
   Comm_uid,
+  comm_id,
   infos,
 }) => {
   useEffect(() => {
-    setLikes(totalLikes);
     setNumberComments(totalComm);
     getLikes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const ref = useRef();
+  const ref2 = useRef();
+
+  const [showOptionsPost, setShowOptionsPost] = useState(false);
+  const [showOptionsComm, setShowOptionsComm] = useState(false);
+
+  // useEffect that close the options when click outside of the target event
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      // If the menu is open and the clicked target is not within the menu,
+      // then close the menu
+      if (showOptionsPost && ref.current && !ref.current.contains(e.target)) {
+        setShowOptionsPost(false);
+      }
+      if (showOptionsComm && ref2.current && !ref2.current.contains(e.target)) {
+        setShowOptionsComm(false);
+      }
+    };
+
+    document.addEventListener("mousedown", checkIfClickedOutside);
+
+    return () => {
+      // Cleanup the event listener
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [showOptionsPost, showOptionsComm]);
 
   const token = JSON.parse(localStorage.token);
   const userId = token.userId;
   const postId = id;
   const [liked, setLiked] = useState(false);
-  const [likes, setLikes] = useState();
+  const [likes, setLikes] = useState(totalLikes);
   const [showComment, setShowComment] = useState(false);
   const [numberComments, setNumberComments] = useState(totalComm);
   const [comments, setComments] = useState([]);
   const [commentForm, setCommentForm] = useState("");
 
-  //toggler 
+  const toggleOptionsPost = () => {
+    setShowOptionsPost(!showOptionsPost);
+    // console.log(showOptionsPost);
+  };
+  const toggleOptionsComm = () => {
+    setShowOptionsComm(!showOptionsComm);
+    console.log(showOptionsComm);
+  };
+  //toggler to hide/show comments
   const toggleShowComment = (id) => {
     setShowComment(!showComment);
     getComments(lastComm);
@@ -91,7 +126,6 @@ const Post = ({
       });
   };
 
-
   // get all comments of the post
   const getComments = async (lastComm) => {
     if (lastComm === null) {
@@ -111,9 +145,8 @@ const Post = ({
 
   //add comment to the post
   const sendComment = async (e) => {
-
     e.preventDefault();
- 
+
     await axios({
       method: "POST",
       url: `http://localhost:3500/api/posts/${id}/comments`,
@@ -128,7 +161,6 @@ const Post = ({
         setCommentForm("");
         setNumberComments(numberComments + 1);
         getComments();
-
       })
       .catch((err) => {
         console.log(err.response);
@@ -136,8 +168,44 @@ const Post = ({
     // console.log (commentForm)
   };
 
-        
-      
+  //delete post
+  const deletePost = async () => {
+    await axios({
+      method: "DELETE",
+      url: `http://localhost:3500/api/posts/${postId}`,
+      data: {
+        postId,
+        userId,
+        admin,
+      },
+    })
+      .then((res) => {
+        // console.log(res);
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  //delete comment
+  const deleteComm = async () => {
+    await axios({
+      method: "DELETE",
+      url: `http://localhost:3500/api/posts/comments/${comm_id}`,
+      data: {
+        userId,
+        admin,
+      },
+    })
+      .then((res) => {
+        // console.log(res);
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
 
   return (
     <div className={`post data-id="${id}`}>
@@ -154,16 +222,28 @@ const Post = ({
           className={`post-header-right ${
             u_id === userId || admin === 1 ? "active" : "inactive"
           }`}
+          ref={ref}
         >
-          <i className="fas fa-ellipsis-h"></i>
+          <div className="icon-container" onClick={toggleOptionsPost}>
+            <i className="fas fa-ellipsis-h"></i>
+          </div>
+          {/* show options */}
+          {showOptionsPost ? (
+            <div className="options">
+              <p className="modify">Modifier</p>{" "}
+              <p className="delete" onClick={deletePost}>
+                Supprimer
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
-
       <div className="post-body">
         <p className="post-message">{message}</p>
         <img className="post-image" src={image} alt="" />
       </div>
-
       <div className="post-footer">
         <div className="like-comment">
           <div className="like-container">
@@ -193,9 +273,8 @@ const Post = ({
         <hr />
         {/* LAST COMM SECTION */}
         {lastComm != null && showComment === false ? (
-          // comments list
           <div className="comment-section">
-            <div className="comment">
+            <div className="comment ">
               <div className="comment-header">
                 <div className="comment-header-left">
                   <img src={Comm_picture} alt="" className="profil-picture" />
@@ -205,50 +284,78 @@ const Post = ({
                     <p className="date">{timePassed(dateComm)}</p>
                   </div>
                 </div>
-                <div className={`comment-header-right ${
-            Comm_uid === userId || admin === 1 ? "active" : "inactive"
-          }`}>
-                  <i className="fas fa-ellipsis-h"></i>
+                <div
+                  className={`comment-header-right ${
+                    Comm_uid === userId || admin === 1 ? "active" : "inactive"
+                  }`}
+                  ref={ref2}
+                >
+                  <div className="icon-container" onClick={toggleOptionsComm}>
+                    <i className="fas fa-ellipsis-h"></i>
+                  </div>
+                  {/* show options */}
+                  {showOptionsComm ? (
+                    <div className="options -comm">
+                      <p className="delete" onClick={deleteComm}>
+                        Supprimer
+                      </p>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               <p className="comment-message">{lastComm}</p>
             </div>
           </div>
-        ) : ( 
+        ) : (
           ""
         )}
 
-        {/* COMMENTS SECTION */}
+        {/* SHOW ALL COMMENTS SECTION */}
         {showComment ? (
           <form action="" className="form-comment" onSubmit={sendComment}>
-            <img src={infos.imageprofile} alt="image de profile utilisateur" className="profil-picture" />
-            <input type="text" placeholder="Ajouter un commentaire" className="add-comment" onChange={(e) => setCommentForm(e.target.value)} id="input-comment" /> 
-            <button className="add-comment-button" disabled={commentForm === ""}  >
+            <img
+              src={infos.imageprofile}
+              alt="profile utilisateur"
+              className="profil-picture"
+            />
+            <input
+              type="text"
+              placeholder="Ajouter un commentaire"
+              className="add-comment"
+              onChange={(e) => setCommentForm(e.target.value)}
+              id="input-comment"
+            />
+            <button
+              className="add-comment-button"
+              disabled={commentForm === ""}
+            >
               <i className="fas fa-paper-plane"></i>
             </button>
           </form>
-
-        ) : ""}
+        ) : (
+          ""
+        )}
 
         {showComment
-          ?       
-            comments.map((comment) => (
-              
+          ? comments.map((comment) => (
               <Comments
-                key = {comment.datecreation_comm}
+                key={comment.datecreation_comm}
                 commentaire={comment.commentaire}
                 nom={comment.nom}
                 prenom={comment.prenom}
                 picture={comment.imageProfile}
                 date={comment.datecreation_comm}
-                comm_uId = {comment.utilisateur_id}
-                userId = {userId}
-                admin = {admin}
-                id = {comment.comm_id}
+                comm_uId={comment.utilisateur_id}
+                userId={userId}
+                admin={admin}
+                id={comment.comm_id}
               />
             ))
           : ""}
       </div>
+      {/* MODIFY POST  */}
     </div>
   );
 };

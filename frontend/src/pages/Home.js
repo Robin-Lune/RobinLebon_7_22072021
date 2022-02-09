@@ -8,9 +8,37 @@ const Home = () => {
   useEffect(() => {
     getUser();
     getAllPosts();
-  }, []);// eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
+
+  const filterPosts = (posts, query) => {
+    if (!query) {
+        return posts;
+    }
+
+    return posts.filter((post) => {
+        const postName = post.nom.toLowerCase();
+        const postPrenom = post.prenom.toLowerCase();
+        const postMessage = post.message.toLowerCase();
+
+        return (
+            postName.includes(query) ||
+            postPrenom.includes(query) ||
+            postMessage.includes(query)
+        );
+
+    });
+};
+
+
+  const { search } = window.location;
+  const query = new URLSearchParams(search).get('s');
+  const [searchQuery, setSearchQuery] = useState(query || "");
+  const filteredPosts = filterPosts(posts, searchQuery);
+
+
+
 
   // Set header Authorization with the token in the local storage
   if (localStorage.token) {
@@ -19,19 +47,19 @@ const Home = () => {
   }
 
   // Call API to get ALL posts
-const getAllPosts = async () => { 
-  await axios({
-    method: "GET",
-    url: "http://localhost:3500/api/posts/",
-  })
-    .then((res) => {
-      setPosts(res.data);
-      console.log(posts);
+  const getAllPosts = async () => {
+    await axios({
+      method: "GET",
+      url: "http://localhost:3500/api/posts/",
     })
-    .catch((err) => {
-      window.location.href = "/login";
-    });
-};
+      .then((res) => {
+        setPosts(res.data);
+        console.log(posts);
+      })
+      .catch((err) => {
+        window.location.href = "/login";
+      });
+  };
 
   //get User infos
   const getUser = async () => {
@@ -49,20 +77,18 @@ const getAllPosts = async () => {
       });
   };
 
- 
   return (
     <div>
       {/* {localStorage.token ? <Header /> <Postes /> : <div>Vous n'êtes pas connecté</div>} */}
-      <Header />
+      <Header 
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        />
       <div className="home-container">
-       
+        <Poster infos={user} />
 
-        <Poster infos={user}  />
-      
-
-        {posts.map((post) => (
+        {filteredPosts.map(post => (
           <Postes
-
             key={post.datecreation}
             id={post.id}
             image={post.imageurl}
@@ -73,15 +99,16 @@ const getAllPosts = async () => {
             authorPicture={post.imageProfile}
             admin={user.admin}
             totalLikes={post.total_like}
-            totalComm = {post.total_comm}
-            dateComm = {post.datecreation_comm}   
-            lastComm = {post.commentaire}         
-            Comm_nom = {post.comm_nom} 
-            Comm_prenom = {post.comm_prenom}
-            Comm_picture = {post.comm_picture} 
-            Comm_uid = {post.comm_uid}
+            totalComm={post.total_comm}
+            dateComm={post.datecreation_comm}
+            lastComm={post.commentaire}
+            Comm_nom={post.comm_nom}
+            Comm_prenom={post.comm_prenom}
+            Comm_picture={post.comm_picture}
+            Comm_uid={post.comm_uid}
+            comm_id={post.comm_id}
             infos={user}
-          /> 
+          />
         ))}
       </div>
     </div>

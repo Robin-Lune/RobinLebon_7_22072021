@@ -1,20 +1,28 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { NavLink } from 'react-router-dom';
-const Header = () => {
+const Header = (searchQuery,setSearchQuery) => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
         window.location.href = "/login";
     };
+    
+    const history = useNavigate();
+    const onSubmit = (e) => {
+        history.push(`/search/${searchQuery}`);
+        e.preventDefault();
+    };
      
     return (
         <div className='headerContainer'>
             <img src="./ressources/icon-left-font.png" alt="Logo de Groupomania" />
-            <div className="searchInput">
-                <input type="search" placeholder='Rechercher' />
+            <form action="" className="searchInput" autoComplete='off' onSubmit={onSubmit}>
+                <input type="text" placeholder='Rechercher'   onInput={e => setSearchQuery(e.target.value)} name="s"/>
                 <div className="search-icon"><i className="fas fa-search "></i></div>
-
-            </div>
+            </form>
+           
          
                 <nav className="nav-right">
                     <ul className='nav-list'>
