@@ -9,6 +9,7 @@ router.post("/", auth,multer,postsCtrl.createPost);
 router.put("/:id", auth, multer, postsCtrl.modifyPost);
 router.delete("/:id", auth, postsCtrl.deletePost);
 
+
 router.get("/:id/comments", auth, postsCtrl.getComments);
 router.post("/:id/comments", auth, postsCtrl.createComment);
 router.delete("/comments/:id", auth, postsCtrl.deleteComment);

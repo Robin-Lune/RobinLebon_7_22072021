@@ -69,7 +69,13 @@ const handlePost = async (e) => {
                     <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${infos.infos.prenom} `} onChange={(e) => setMessage(e.target.value)}/>
                 </div>
                 <div className="poster-footer">
-                    <input type="file" id="imageUpload" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad}  />
+                    <label htmlFor="file-input-poster">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    <p>Importer une image</p>
+
+                    </label>
+                        <input type="file" id="file-input-poster" name="picture"  accept="image/png, image/jpeg, image/gif" onChange={pictureLoad}  />
+                  
                     <div id="image-container"></div>
                 </div>
                 <input type="submit" id="submit-post" />

@@ -65,6 +65,11 @@ const Post = ({
   const [numberComments, setNumberComments] = useState(totalComm);
   const [comments, setComments] = useState([]);
   const [commentForm, setCommentForm] = useState("");
+  const [messagePost, setMessagePost] = useState(message);
+  const [modifyComm, setModifyComm] = useState(false);
+  const [imagePostPreview, setImagePostPreview] = useState(image);
+  const [imagePostUpload, setImagePostUpload] = useState();
+  const [deleteImageStatus, setDeleteImageStatus] = useState(false);
 
   const toggleOptionsPost = () => {
     setShowOptionsPost(!showOptionsPost);
@@ -79,6 +84,18 @@ const Post = ({
     setShowComment(!showComment);
     getComments(lastComm);
     // console.log("Show = " + showComment);
+  };
+  const toggleModifyComm = () => {
+    setModifyComm(!modifyComm);
+
+    console.log(modifyComm);
+  };
+
+  const cancelEdit = () => {
+    setModifyComm(false);
+    setMessagePost(message);
+    setImagePostPreview(image);
+    setImagePostUpload();
   };
 
   const getLikes = async () => {
@@ -207,6 +224,46 @@ const Post = ({
       });
   };
 
+  const pictureChange = (e) => {
+    if (e.target.files[0]) {
+      setImagePostUpload(e.target.files[0]);
+      setImagePostPreview(URL.createObjectURL(e.target.files[0]));
+    }
+    console.log(imagePostUpload);
+  };
+
+  const modifyPost = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    if (imagePostUpload) {
+      data.append("image", imagePostUpload);
+    }
+    data.append("message", messagePost);
+    data.append("userId", userId);
+    data.append("admin", admin);
+    data.append("deleteImage", deleteImageStatus);
+
+    await axios({
+      method: "PUT",
+      url: `http://localhost:3500/api/posts/${postId}`,
+      data,
+    })
+      .then((res) => {
+        console.log(res);
+        window.location.href = "/";
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const deleteImage = async () => {
+    setImagePostPreview();
+    setImagePostUpload();
+    image = null;
+    setDeleteImageStatus(true);
+  };
+
   return (
     <div className={`post data-id="${id}`}>
       <div className="post-header">
@@ -230,7 +287,15 @@ const Post = ({
           {/* show options */}
           {showOptionsPost ? (
             <div className="options">
-              <p className="modify">Modifier</p>{" "}
+              <p
+                className="edit"
+                onClick={function (event) {
+                  toggleModifyComm();
+                  toggleOptionsPost();
+                }}
+              >
+                Modifier
+              </p>
               <p className="delete" onClick={deletePost}>
                 Supprimer
               </p>
@@ -241,8 +306,69 @@ const Post = ({
         </div>
       </div>
       <div className="post-body">
-        <p className="post-message">{message}</p>
-        <img className="post-image" src={image} alt="" />
+        {modifyComm ? (
+          <form action="" onSubmit={modifyPost}>
+            <p className="abort-edit" onClick={cancelEdit}>
+              Annuler
+            </p>
+            <input
+              type="text"
+              value={messagePost}
+              onChange={(e) => setMessagePost(e.target.value)}
+              className="text-modifier"
+            />
+            {image !== null ? (
+              <div class="image-upload">
+                <label for="file-input">
+                  <img src={imagePostPreview} className="post-image" />
+                  <i class="fa-solid fa-file-image"></i>
+                </label>
+
+                <input
+                  id="file-input"
+                  type="file"
+                  name="picture"
+                  accept="image/png, image/jpeg, image/gif"
+                  onChange={pictureChange}
+                />
+                <p className="delete-image" onClick={deleteImage}>
+                  supprimer l'image
+                </p>
+              </div>
+            ) : (
+              <div class="image-upload">
+                <label for="file-input">
+                  <img src={imagePostPreview} className="post-image" />
+                  <i class="fa-solid fa-file-image"></i>
+                </label>
+
+                <input
+                  id="file-input"
+                  type="file"
+                  name="picture"
+                  accept="image/png, image/jpeg, image/gif"
+                  onChange={pictureChange}
+                />
+                <p className="delete-image" onClick={deleteImage}>
+                  supprimer l'image
+                </p>
+              </div>
+            )}
+
+            <button className="btn-modify" type="submit">
+              Modifier mon post!
+            </button>
+          </form>
+        ) : (
+          <div className="body">
+            <p className="post-message">{messagePost}</p>
+            {image !== null ? (
+              <img className="post-image" src={image} alt="" />
+            ) : (
+              ""
+            )}
+          </div>
+        )}
       </div>
       <div className="post-footer">
         <div className="like-comment">

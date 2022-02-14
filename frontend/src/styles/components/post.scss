@@ -21,14 +21,14 @@
   @include flex-dir(row, center, space-between);
   width: 100%;
   margin: 0 0 10px 0;
-  
+
   .post-header-left {
     @include flex-dir(row, center, flex-start);
   }
   .post-header-right {
     position: relative;
-    .fa-ellipsis-h{
-      cursor:pointer;
+    .fa-ellipsis-h {
+      cursor: pointer;
     }
   }
   .exif-data {
@@ -55,25 +55,29 @@
   height: 65px;
   margin: 0 0 10px 0;
   border-radius: 5px;
-  background-color: rgba(221, 175, 132, .98);
+  background-color: rgba(221, 175, 132, 0.98);
   font-weight: bold;
-  top :20px ;
+  top: 20px;
   right: 0;
   z-index: 100;
-  .delete{
+  .delete {
     color: red;
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: rgb(212, 25, 25);
     }
   }
-  
+  .edit {
+    cursor: pointer;
+    &:hover {
+      color: rgb(1, 79, 116);
+    }
+  }
 }
-.-comm{
+.-comm {
   height: 50px;
   top: -15px;
   right: 20px;
-
 }
 
 .post-body {
@@ -81,7 +85,95 @@
   width: 100%;
   height: 100%;
   color: black;
+  .body {
+    width: 100%;
+  }
+  form {
+    width: 100%;
+    position: relative;
 
+    .abort-edit {
+      width: 65px;
+      text-align: center;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 0 10px 10px auto;
+      &:hover {
+        color: rgb(212, 25, 25);
+      }
+    }
+    .delete-image {
+      width: auto;
+      text-align: center;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px auto ;
+      &:hover {
+        color: rgb(212, 25, 25);
+      }
+    }
+    .text-modifier {
+      width: 100%;
+      height: 40px;
+      flex: 1;
+      border-radius: 30px;
+      background-color: $light-grey;
+      border: none;
+      outline: none;
+      padding: 10px;
+      font-size: 20px;
+      color: rgb(0, 0, 0);
+      margin-bottom: 10px;
+      &:focus {
+        border: 2px solid $color-complementary;
+      }
+    }
+    .image-upload {
+      input {
+        visibility: hidden;
+        width: 0;
+        height: 0;
+      }
+      .fa-file-image {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-30%, -50%);
+        width: 50px;
+        height: 50px;
+        font-size: 60px;
+        z-index: 100;
+        cursor: pointer;
+        color: $color-complementary;
+      }
+    }
+
+    img {
+      min-height: 100px;
+      z-index: 1;
+      cursor: pointer;
+      filter: grayscale(.4);
+      filter: blur(.8px);
+      opacity: .7;
+    }
+
+    .btn-modify {
+      width: 100%;
+      height: 40px;
+      border-radius: 30px;
+      background-color: $color-primary;
+      border: none;
+      outline: none;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+      &:hover {
+        background-color: rgb(1, 79, 116);
+      }
+    }
+  }
   .post-message {
     color: $dark-grey;
     font-size: 20px;
@@ -119,17 +211,14 @@
       margin: 0 5px;
       cursor: pointer;
       .fa-heart {
-        // font-size: 20px;
+        font-size: 20px;
         color: $color-secondary;
-        height: 20px;
-        width: 20px;
         margin: 5px;
       }
       .like-count {
         font-size: 14px;
         color: $dark-grey;
         margin: 5px;
-
       }
 
       &:hover {
@@ -138,7 +227,6 @@
           color: $color-tertiary;
         }
       }
-      
     }
 
     .comment-container {
@@ -151,18 +239,14 @@
       border-radius: 5px;
       cursor: pointer;
       .fa-comment {
-        // font-size: 20px;
+        font-size: 20px;
         color: $color-secondary;
-
-        height: 20px;
-        width: 20px;
         margin: 5px;
       }
       .comment-count {
         font-size: 14px;
         color: $dark-grey;
         margin: 5px;
-
       }
       .comment-count-inactive {
         display: none;
@@ -175,16 +259,13 @@
       }
     }
   }
-  
-  
 }
 
 .inactive {
   display: none;
 }
 
-
-.comment-section{
+.comment-section {
   @include flex-dir(column, flex-start, center);
   width: 100%;
   height: auto;
@@ -205,15 +286,15 @@
     @include flex-dir(row, center, space-between);
     width: 100%;
     margin: 0 0 10px 0;
-   
+
     .comment-header-left {
       @include flex-dir(row, center, flex-start);
     }
     .comment-header-right {
       position: relative;
-    .fa-ellipsis-h{
-      cursor:pointer;
-    }
+      .fa-ellipsis-h {
+        cursor: pointer;
+      }
     }
     .exif-data {
       @include flex-dir(column, flex-start, center);
@@ -231,16 +312,14 @@
       color: $dark-grey;
     }
   }
-  .comment-message{
+  .comment-message {
     width: 100%;
     white-space: initial;
     overflow-wrap: break-word;
   }
-
 }
 
-
-.form-comment{
+.form-comment {
   @include flex-dir(row, center, flex-start);
   width: 100%;
   height: 60px;
@@ -256,10 +335,8 @@
     font-size: 20px;
     color: rgb(0, 0, 0);
     // margin: 0 10px 0 10px;
-    
-    
   }
-  .add-comment-button{
+  .add-comment-button {
     @include flex-dir(row, center, center);
     height: 100%;
     flex: 0;
@@ -270,19 +347,18 @@
     padding: 10px;
     cursor: pointer;
     &:hover {
-      .fa-paper-plane{
+      .fa-paper-plane {
         color: $color-primary;
       }
     }
     &:active {
-      .fa-paper-plane{
+      .fa-paper-plane {
         color: $color-tertiary;
       }
     }
   }
-  .fa-paper-plane{
-    height: 25px;
-    width: 25px;
+  .fa-paper-plane {
+    font-size: 25px;
     color: $color-complementary;
     margin: 0 10px;
   }
