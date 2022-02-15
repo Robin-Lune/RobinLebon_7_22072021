@@ -25,17 +25,15 @@
   margin: 10px;
   //   background-color: lightblue;
   .profil-picture {
-    @include flex-dir(row, center, center);
-    border-radius: 50%;
-    height: 50px;
-    min-width: 50px;
+
+    
     margin: 0 10px 0 20px;
-    overflow: hidden;
-    img {
+    object-fit:cover;
+ 
       border-radius: 50%;
       height: 50px;
       width: 50px;
-    }
+ 
   }
   .text-post {
     height: 60%;

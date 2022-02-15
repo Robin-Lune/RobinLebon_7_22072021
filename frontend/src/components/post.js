@@ -3,6 +3,7 @@ import { timePassed } from "../Utils/utils";
 
 import axios from "axios";
 import Comments from "./comments";
+import { NavLink } from "react-router-dom";
 
 const Post = ({
   id,
@@ -77,7 +78,7 @@ const Post = ({
   };
   const toggleOptionsComm = () => {
     setShowOptionsComm(!showOptionsComm);
-    console.log(showOptionsComm);
+    // console.log(showOptionsComm);
   };
   //toggler to hide/show comments
   const toggleShowComment = (id) => {
@@ -88,7 +89,7 @@ const Post = ({
   const toggleModifyComm = () => {
     setModifyComm(!modifyComm);
 
-    console.log(modifyComm);
+    // console.log(modifyComm);
   };
 
   const cancelEdit = () => {
@@ -117,7 +118,6 @@ const Post = ({
 
   //on click on like button add like to the post
   const handleLike = async () => {
-    const userId = token.userId;
     await axios({
       method: "POST",
       url: `http://localhost:3500/api/posts/${id}/like`,
@@ -127,7 +127,7 @@ const Post = ({
       },
     })
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         getLikes();
         if (liked) {
           setLiked(false);
@@ -166,7 +166,7 @@ const Post = ({
 
     await axios({
       method: "POST",
-      url: `http://localhost:3500/api/posts/${id}/comments`,
+      url: `http://localhost:3500/api/posts/${postId}/comments`,
       data: {
         postId,
         userId,
@@ -267,6 +267,7 @@ const Post = ({
   return (
     <div className={`post data-id="${id}`}>
       <div className="post-header">
+        <NavLink to={`/account/${u_id}`} className="profile-link">
         <div className="post-header-left">
           <img src={authorPicture} alt="" className="profil-picture" />
           <div className="exif-data">
@@ -274,7 +275,7 @@ const Post = ({
             <p className="date">{timePassed(date)}</p>
           </div>
         </div>
-
+        </NavLink>
         <div
           className={`post-header-right ${
             u_id === userId || admin === 1 ? "active" : "inactive"
@@ -318,10 +319,10 @@ const Post = ({
               className="text-modifier"
             />
             {image !== null ? (
-              <div class="image-upload">
-                <label for="file-input">
+              <div className="image-upload">
+                <label htmlFor="file-input">
                   <img src={imagePostPreview} className="post-image" />
-                  <i class="fa-solid fa-file-image"></i>
+                  <i className="fa-solid fa-file-image"></i>
                 </label>
 
                 <input
@@ -336,10 +337,10 @@ const Post = ({
                 </p>
               </div>
             ) : (
-              <div class="image-upload">
-                <label for="file-input">
+              <div className="image-upload">
+                <label htmlFor="file-input">
                   <img src={imagePostPreview} className="post-image" />
-                  <i class="fa-solid fa-file-image"></i>
+                  <i className="fa-solid fa-file-image"></i>
                 </label>
 
                 <input
@@ -380,7 +381,7 @@ const Post = ({
               className={`icon-cointainer ${liked ? "inactive" : ""}`}
               onClick={handleLike}
             >
-              <i class="far fa-heart like-icon"></i>
+              <i className="far fa-heart like-icon"></i>
             </div>
             <div
               className={`icon-cointainer ${liked ? "" : "inactive"}`}
@@ -402,6 +403,7 @@ const Post = ({
           <div className="comment-section">
             <div className="comment ">
               <div className="comment-header">
+                <NavLink to={`/account/${Comm_uid}`} className="profile-link">
                 <div className="comment-header-left">
                   <img src={Comm_picture} alt="" className="profil-picture" />
 
@@ -410,6 +412,7 @@ const Post = ({
                     <p className="date">{timePassed(dateComm)}</p>
                   </div>
                 </div>
+                </NavLink>
                 <div
                   className={`comment-header-right ${
                     Comm_uid === userId || admin === 1 ? "active" : "inactive"
@@ -450,6 +453,7 @@ const Post = ({
               type="text"
               placeholder="Ajouter un commentaire"
               className="add-comment"
+              value={commentForm}
               onChange={(e) => setCommentForm(e.target.value)}
               id="input-comment"
             />

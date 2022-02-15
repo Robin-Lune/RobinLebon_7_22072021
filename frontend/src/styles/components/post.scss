@@ -11,17 +11,22 @@
 }
 
 .profil-picture {
+  object-fit:cover;
   border-radius: 50%;
   height: 40px;
   min-width: 40px;
   margin: 0 10px 0 0;
 }
 
+.profile-link{
+  text-decoration: none;
+}
+
 .post-header {
   @include flex-dir(row, center, space-between);
   width: 100%;
   margin: 0 0 10px 0;
-
+  
   .post-header-left {
     @include flex-dir(row, center, flex-start);
   }

@@ -1,20 +1,21 @@
 import React, {useEffect, useState,useRef} from "react";
 import { timePassed } from "../Utils/utils";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
 
 const Comments = (commentaire, nom) => {
   const ref = useRef();
+  const token = JSON.parse(localStorage.token);
   const comm_id =   commentaire.id;
-  const userId = commentaire.userId;
+  const userId = token.userId;
   const admin = commentaire.admin;
+  // console.log(commentaire);
 
-
-  const [showOptionsPost, setShowOptionsPost] = useState(false);
   const [showOptionsComm, setShowOptionsComm] = useState(false);
 
   const toggleOptionsComm = () => {
     setShowOptionsComm(!showOptionsComm);
-    console.log(showOptionsComm);
+    // console.log(showOptionsComm);
   };
 
   // useEffect that close the options when click outside of the target event
@@ -60,6 +61,7 @@ const Comments = (commentaire, nom) => {
       <div className="comment-section">
         <div className="comment">
           <div className="comment-header">
+            <NavLink to={`/Account/${commentaire.comm_uId}`} className="profile-link">
             <div className="comment-header-left">
               <img
                 src={commentaire.picture}
@@ -72,6 +74,8 @@ const Comments = (commentaire, nom) => {
                 <p className="date">{timePassed(commentaire.date)}</p>
               </div>
             </div>
+            </NavLink>
+
             <div
               className={`comment-header-right ${
                 commentaire.comm_uId === userId ||

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/header";
 import axios from "axios";
-import Postes from "../components/post";
+import Posts from "../components/post";
 import Poster from "../components/poster";
 
 const Home = () => {
@@ -11,6 +11,7 @@ const Home = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState([]);
+  const token = JSON.parse(localStorage.token);
 
   const filterPosts = (posts, query) => {
     if (!query) {
@@ -54,7 +55,7 @@ const Home = () => {
     })
       .then((res) => {
         setPosts(res.data);
-        console.log(posts);
+        // console.log(posts);
       })
       .catch((err) => {
         window.location.href = "/login";
@@ -63,13 +64,13 @@ const Home = () => {
 
   //get User infos
   const getUser = async () => {
-    const token = JSON.parse(localStorage.token);
+
     await axios({
       method: "GET",
       url: `http://localhost:3500/api/auth/${token.userId}`,
     })
       .then((res) => {
-        console.log(res.data[0]);
+        // console.log(res.data[0]);
         setUser(res.data[0]);
       })
       .catch((err) => {
@@ -83,12 +84,12 @@ const Home = () => {
       <Header 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        />
+         />
       <div className="home-container">
         <Poster infos={user} />
 
         {filteredPosts.map(post => (
-          <Postes
+          <Posts
             key={post.datecreation}
             id={post.id}
             image={post.imageurl}

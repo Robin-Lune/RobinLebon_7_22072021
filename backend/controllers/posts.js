@@ -124,13 +124,13 @@ exports.modifyPost = (req, res, next) => {
   const sqlInfos = "SELECT * FROM post WHERE id = ? ;";
   let filename = "";
   const deleteImage = req.body.deleteImage;
-  
-  if (admin === '1') {
+
+  if (admin === "1") {
     console.log("admin");
     db.query(sqlInfos, [postId], (err, result) => {
       if (err) {
         throw err;
-      };
+      }
       if (postImage) {
         const imageurl = `${req.protocol}://${req.get("host")}/images/posts/${
           req.file.filename
@@ -154,12 +154,11 @@ exports.modifyPost = (req, res, next) => {
           if (err) {
             res.status(404).json({ err });
             throw err;
-          };
+          }
           res.status(200).json({ message: "Poste modifié!" });
           console.log("Poste modifié!");
         });
-
-      } else if (deleteImage === 'true' && result[0].imageurl !== null) {
+      } else if (deleteImage === "true" && result[0].imageurl !== null) {
         filename = result[0].imageurl.split("/images/posts/")[1];
         fs.unlink(`images/posts/${filename}`, () => {
           if (err) console.log(err);
@@ -172,46 +171,63 @@ exports.modifyPost = (req, res, next) => {
           if (err) {
             res.status(404).json({ err });
             throw err;
-          };
+          }
           res.status(200).json({ message: "Poste modifié!" });
           console.log("Poste modifié!");
-
         });
-      }
-      
-      else {
+      } else {
         const sql = `UPDATE post SET message = ? WHERE id = ${postId};`;
         db.query(sql, [message], (err, result) => {
           if (err) {
             res.status(404).json({ err });
             throw err;
-          };
+          }
           res.status(200).json({ message: "Poste modifié!" });
           console.log("Poste modifié!");
-
         });
       }
-  });
-} else {
-  const sql = "SELECT * FROM post WHERE id = ? ;";
-  db.query(sql, [postId], (err, result) => {
-    if (err) {
-      res.status(404).json({ err });
-      throw err;
-    }
-     else if (`${result[0].utilisateur_id}` !== `${userId}`) {
-       console.log(result[0].utilisateur_id);
-      res
-        .status(401)
-        .json({ message: "Vous n'avez pas le droit de modifier ce post" });
+    });
+  } else {
+    const sql = "SELECT * FROM post WHERE id = ? ;";
+    db.query(sql, [postId], (err, result) => {
+      if (err) {
+        res.status(404).json({ err });
+        throw err;
+      } else if (`${result[0].utilisateur_id}` !== `${userId}`) {
+        console.log(result[0].utilisateur_id);
+        res
+          .status(401)
+          .json({ message: "Vous n'avez pas le droit de modifier ce post" });
         return;
-    } else {
-      console.log("user");
-      if (postImage) {
-        const imageurl = `${req.protocol}://${req.get("host")}/images/posts/${
-          req.file.filename
-        }`;
-        if (result[0].imageurl !== null) {
+      } else {
+        console.log("user");
+        if (postImage) {
+          const imageurl = `${req.protocol}://${req.get("host")}/images/posts/${
+            req.file.filename
+          }`;
+          if (result[0].imageurl !== null) {
+            filename = result[0].imageurl.split("/images/posts/")[1];
+            fs.unlink(`images/posts/${filename}`, () => {
+              if (err) console.log(err);
+              else {
+                console.log("Image supprimée");
+              }
+            });
+          }
+          const newPostImage = {
+            message: message,
+            imageurl: imageurl,
+          };
+          const sql = `UPDATE post SET ? WHERE id = ${postId} ;`;
+          db.query(sql, [newPostImage], (err, result) => {
+            if (err) {
+              res.status(404).json({ err });
+              throw err;
+            }
+            res.status(200).json({ message: "Poste modifié!" });
+            console.log("Poste modifié!");
+          });
+        } else if (deleteImage === "true" && result[0].imageurl !== null) {
           filename = result[0].imageurl.split("/images/posts/")[1];
           fs.unlink(`images/posts/${filename}`, () => {
             if (err) console.log(err);
@@ -219,65 +235,32 @@ exports.modifyPost = (req, res, next) => {
               console.log("Image supprimée");
             }
           });
+          const sql = `UPDATE post SET message = ? , imageurl = NULL  WHERE id = ${postId};`;
+          db.query(sql, [message], (err, result) => {
+            if (err) {
+              res.status(404).json({ err });
+              throw err;
+            }
+            res.status(200).json({ message: "Poste modifié!" });
+            console.log("Poste modifié!");
+          });
+        } else {
+          const sql = `UPDATE post SET message = ? WHERE id = ${postId};`;
+          db.query(sql, [message], (err, result) => {
+            if (err) {
+              res.status(404).json({ err });
+              throw err;
+            }
+            res.status(200).json({ message: "Poste modifié!" });
+            console.log("Poste modifié!");
+          });
         }
-        const newPostImage = {
-          message: message,
-          imageurl: imageurl,
-        };
-        const sql = `UPDATE post SET ? WHERE id = ${postId} ;`;
-        db.query(sql, [newPostImage], (err, result) => {
-          if (err) {
-            res.status(404).json({ err });
-            throw err;
-          };
-          res.status(200).json({ message: "Poste modifié!" });
-          console.log("Poste modifié!");
-        });
-
-      } else if (deleteImage === 'true' && result[0].imageurl !== null) {
-        filename = result[0].imageurl.split("/images/posts/")[1];
-        fs.unlink(`images/posts/${filename}`, () => {
-          if (err) console.log(err);
-          else {
-            console.log("Image supprimée");
-          }
-        });
-        const sql = `UPDATE post SET message = ? , imageurl = NULL  WHERE id = ${postId};`;
-        db.query(sql,[message], (err, result) => {
-          if (err) {
-            res.status(404).json({ err });
-            throw err;
-          };
-          res.status(200).json({ message: "Poste modifié!" });
-          console.log("Poste modifié!");
-
-        });
       }
-      
-      else {
-        const sql = `UPDATE post SET message = ? WHERE id = ${postId};`;
-        db.query(sql,[message], (err, result) => {
-          if (err) {
-            res.status(404).json({ err });
-            throw err;
-          };
-          res.status(200).json({ message: "Poste modifié!" });
-          console.log("Poste modifié!");
-
-        });
-      }
-    }
-  });
-
-} 
+    });
+  }
 
   console.log(deleteImage);
 };
-
-
-
-
-
 
 // COMMENT LOGIC
 
