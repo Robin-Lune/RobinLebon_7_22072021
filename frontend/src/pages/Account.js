@@ -11,7 +11,6 @@ const Account = () => {
     getUser();
     getPosts();
   }, []);
-  
 
   const ref = useRef();
   const token = JSON.parse(localStorage.token);
@@ -21,6 +20,9 @@ const Account = () => {
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
   const [showModifyUser, setShowModifyUser] = useState(false);
+  const [showDeleteUser, setShowDeleteUser] = useState(false);
+  const [deleteUser, setDeleteUser] = useState("");
+  const [checkDelete, setCheckDelete] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -39,6 +41,11 @@ const Account = () => {
     setLastName(userPage.nom);
     setImageProfilePreview(userPage.imageprofile);
     // console.log("Modify User = " + showModifyUser);
+  };
+
+  const toggleShowDeleteUser = () => {
+    setShowDeleteUser(!showDeleteUser);
+    console.log("ShowDelete User = " + showDeleteUser);
   };
 
   useEffect(() => {
@@ -111,11 +118,11 @@ const Account = () => {
     let data = new FormData();
     if (imageProfileUpload) {
       data.append("profil_image", imageProfileUpload);
-    };
-     data.append("userId", user.id);
+    }
+    data.append("userId", user.id);
     data.append("admin", user.admin);
     data.append("nom", lastName);
-    data.append("prenom", firstName); 
+    data.append("prenom", firstName);
     data.append("email", email);
     await axios({
       method: "PUT",
@@ -140,13 +147,40 @@ const Account = () => {
     // console.log(imageProfileUpload);
   };
 
+  const deleteAccount = async (e) => {
+    e.preventDefault();
+    await axios({
+      method: "DELETE",
+      url: `http://localhost:3500/api/auth/${id}`,
+      data:{
+        userId: user.id,
+        admin: user.admin
+      },
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (user.admin === 1){
+        setShowDeleteUser(false);
+        setCheckDelete(false);
+        getUserPage();
+        window.location.href = "/";
+        } else {
+          localStorage.removeItem('token');
+        window.location.href = "/login";
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   return (
     <div className="Account-container">
       <Header />
       <div className="Account-header">
         {showModifyUser ? (
           <div className="Account-header-right">
-            <form action="" className="user-form" onSubmit={ModifyInfos}> 
+            <form action="" className="user-form" onSubmit={ModifyInfos}>
               <div className="image-uploader">
                 <label htmlFor="file-input">
                   <img
@@ -184,13 +218,15 @@ const Account = () => {
                 <input
                   type="text"
                   className="input-text"
-                  value={email} 
+                  value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}
                 />
 
-                <button className="btn-submit" type="submit" >Modifier mon profil</button>
+                <button className="btn-submit" type="submit">
+                  Modifier mon profil
+                </button>
               </div>
             </form>
           </div>
@@ -233,7 +269,15 @@ const Account = () => {
               >
                 Modifier
               </p>
-              <p className="delete">Supprimer</p>
+              <p
+                className="delete"
+                onClick={function (event) {
+                  toggleShowDeleteUser();
+                  toggleOptions();
+                }}
+              >
+                Supprimer
+              </p>
             </div>
           ) : (
             ""
@@ -264,6 +308,36 @@ const Account = () => {
           infos={user}
         />
       ))}
+      <div className={`background ${showDeleteUser ? "active" : ""}`}></div>
+      <div className={`delete-container ${showDeleteUser ? "active" : ""}`}>
+        <i
+          className="far fa-times-circle"
+          onClick={function (event) {
+            setDeleteUser(false);
+            toggleShowDeleteUser();
+          }}
+        ></i>
+
+        <h2 className="warning">
+          Attention cette opération est irréversible !
+        </h2>
+        <p>Voulez-vous vraiment supprimer votre compte ?</p>
+        <p>Pour supprimer votre compte entrez votre nom et prénom ci-dessous</p>
+        <form action="" className="form-delete" onSubmit={deleteAccount}>
+          <div className="input-delete-container">
+            <input
+              type="text"
+              className="input-delete"
+              placeholder="Nom Prénom"
+              onChange={(e) => {setDeleteUser(e.target.value.toLocaleLowerCase());}}
+            />       
+            <i className={`fa-solid fa-circle-check ${deleteUser === lastName.toLocaleLowerCase() +" "+ firstName.toLocaleLowerCase() ? "true" : "false"} `} ></i>
+          </div>
+          <button className="btn-delete" type="submit" disabled={deleteUser !== lastName.toLocaleLowerCase() +" "+ firstName.toLocaleLowerCase()} >
+            Supprimer mon compte
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

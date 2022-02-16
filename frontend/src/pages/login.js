@@ -13,7 +13,7 @@ function Login() {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
 
-  const handleSignup = (e) => {
+  const handleSignup =async  (e) => {
     e.preventDefault();
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
@@ -21,7 +21,7 @@ function Login() {
     emailError.innerHTML = '';
     
 
-  axios({
+  await axios({
       method: "POST",
       url: "http://localhost:3500/api/auth/signup",
       data: {
@@ -33,7 +33,7 @@ function Login() {
     }) .then((res) => {
       console.log(res.data);
       alert('Votre compte a été créé avec succès');
-      window.location.href = "/";    
+      window.location.href = "/login";    
     })
     .catch((err) => {
       if (err.response.data.message) {

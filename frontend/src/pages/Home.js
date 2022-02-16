@@ -5,6 +5,9 @@ import Posts from "../components/post";
 import Poster from "../components/poster";
 
 const Home = () => {
+  if (localStorage.token === undefined) {
+    window.location.href = "/login";
+  };
   useEffect(() => {
     getUser();
     getAllPosts();

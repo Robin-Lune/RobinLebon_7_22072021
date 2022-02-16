@@ -58,7 +58,6 @@ const handlePost = async (e) => {
     
         
   };
-
     return (
             <div className="poster">
             <form action="" onSubmit={handlePost}> 
@@ -76,7 +75,9 @@ const handlePost = async (e) => {
                   
                     <div id="image-container"></div>
                 </div>
-                <input type="submit" id="submit-post" />
+                <button type="submit" id="submit-post" disabled={message === "" && file === undefined }>
+                Envoyer
+                </button>
             </form>
         </div>
 
