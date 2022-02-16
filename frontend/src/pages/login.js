@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 
 function Login() {
   const [isActive, setActive] = useState("false");
@@ -13,15 +14,13 @@ function Login() {
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
 
-  const handleSignup =async  (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     const emailError = document.getElementById("emailError");
     const passwordError = document.getElementById("passwordError");
-    passwordError.innerHTML ='';
-    emailError.innerHTML = '';
-    
-
-  await axios({
+    passwordError.innerHTML = "";
+    emailError.innerHTML = "";
+    await axios({
       method: "POST",
       url: "http://localhost:3500/api/auth/signup",
       data: {
@@ -30,19 +29,20 @@ function Login() {
         nom: nom,
         prenom: prenom,
       },
-    }) .then((res) => {
-      console.log(res.data);
-      alert('Votre compte a été créé avec succès');
-      window.location.href = "/login";    
     })
-    .catch((err) => {
-      if (err.response.data.message) {
-        passwordError.innerHTML = err.response.data.message;
+      .then((res) => {
+        console.log(res.data);
+        alert("Votre compte a été créé avec succès");
+        window.location.href = "/login";
+      })
+      .catch((err) => {
+        if (err.response.data.message) {
+          passwordError.innerHTML = err.response.data.message;
         }
         if (err.response.data.error) {
           emailError.innerHTML = err.response.data.error;
         }
-    });
+      });
   };
   const handleLogin = (e) => {
     e.preventDefault();
@@ -64,13 +64,29 @@ function Login() {
       })
       .catch((err) => {
         if (err.response) {
-        loginError.innerHTML = err.response.data.error;
+          loginError.innerHTML = err.response.data.error;
         }
       });
   };
 
   return (
     <div className="mainContainer">
+      <Helmet>
+        <title>Login</title>
+        <meta name="description" content="Page de connexion de la palteforme Groupomania" />
+        {/* FACEBOOK */}
+        <meta property="og:title" content="Login Groupomania" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://localhost:3000/login" />
+        <meta property="og:description" content="Page de connexion de la palteforme Groupomania" />
+        {/* TWITTER */}
+        <meta name="twitter:title" content="Login Groupomania" />
+        <meta name="twitter:description" content="Page de connexion de la palteforme Groupomania" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@Groupomania_Robin_LEBON" />
+        <meta name="twitter:creator" content="@Groupomania_Robin_LEBON" />
+      </Helmet>
+
       <div className={`bgContainer ${isActive ? "" : "blured"}`}>
         <img src="./ressources/icon-above-font.png" alt="" />
         <div className="loginContainer">

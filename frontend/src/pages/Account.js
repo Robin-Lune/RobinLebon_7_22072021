@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import axios from "axios";
 import Header from "../components/header";
 import Posts from "../components/post";
 
 const Account = () => {
   useEffect(() => {
-    document.title = "Account";
     getUserPage();
     getUser();
     getPosts();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ref = useRef();
   const token = JSON.parse(localStorage.token);
@@ -22,7 +22,6 @@ const Account = () => {
   const [showModifyUser, setShowModifyUser] = useState(false);
   const [showDeleteUser, setShowDeleteUser] = useState(false);
   const [deleteUser, setDeleteUser] = useState("");
-  const [checkDelete, setCheckDelete] = useState(false);
   const [showOptions, setShowOptions] = useState(false);
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -45,8 +44,9 @@ const Account = () => {
 
   const toggleShowDeleteUser = () => {
     setShowDeleteUser(!showDeleteUser);
-    console.log("ShowDelete User = " + showDeleteUser);
+    // console.log("ShowDelete User = " + showDeleteUser);
   };
+  
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -161,7 +161,7 @@ const Account = () => {
         // console.log(res.data);
         if (user.admin === 1){
         setShowDeleteUser(false);
-        setCheckDelete(false);
+
         getUserPage();
         window.location.href = "/";
         } else {
@@ -176,6 +176,22 @@ const Account = () => {
 
   return (
     <div className="Account-container">
+      <Helmet>
+        <title>Compte utilisateur</title>
+        <meta name="description" content="Page de profil utilisateur Groupomania" />
+        {/* FACEBOOK */}
+        <meta property="og:title" content="Compte utilisateur" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://localhost:3000/login" />
+        <meta property="og:description" content="Page utilisateur de la palteforme Groupomania" />
+        {/* TWITTER */}
+        <meta name="twitter:title" content="Compte utilisateur" />
+        <meta name="twitter:description" content="Page utilisateur de la palteforme Groupomania" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@Groupomania_Robin_LEBON" />
+        <meta name="twitter:creator" content="@Groupomania_Robin_LEBON" />
+      </Helmet>
+
       <Header />
       <div className="Account-header">
         {showModifyUser ? (
@@ -313,7 +329,7 @@ const Account = () => {
         <i
           className="far fa-times-circle"
           onClick={function (event) {
-            setDeleteUser(false);
+            setDeleteUser("");
             toggleShowDeleteUser();
           }}
         ></i>
@@ -329,6 +345,7 @@ const Account = () => {
               type="text"
               className="input-delete"
               placeholder="Nom Prénom"
+              value={deleteUser}
               onChange={(e) => {setDeleteUser(e.target.value.toLocaleLowerCase());}}
             />       
             <i className={`fa-solid fa-circle-check ${deleteUser === lastName.toLocaleLowerCase() +" "+ firstName.toLocaleLowerCase() ? "true" : "false"} `} ></i>

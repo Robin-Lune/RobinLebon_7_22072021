@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import Header from "../components/header";
 import axios from "axios";
 import Posts from "../components/post";
@@ -83,7 +84,21 @@ const Home = () => {
 
   return (
     <div>
-      {/* {localStorage.token ? <Header /> <Postes /> : <div>Vous n'êtes pas connecté</div>} */}
+      <Helmet>
+        <title>Accueil</title>
+        <meta name="description" content="Page d'accueil de la palteforme Groupomania" />
+        {/* FACEBOOK */}
+        <meta property="og:title" content="Accueil Groupomania" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://localhost:3000/login" />
+        <meta property="og:description" content="Page d'accueil de la palteforme Groupomania" />
+        {/* TWITTER */}
+        <meta name="twitter:title" content="Accueil Groupomania" />
+        <meta name="twitter:description" content="Page d'accueil de la palteforme Groupomania" />
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:site" content="@Groupomania_Robin_LEBON" />
+        <meta name="twitter:creator" content="@Groupomania_Robin_LEBON" />
+      </Helmet>
       <Header 
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
