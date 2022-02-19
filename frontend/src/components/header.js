@@ -13,7 +13,10 @@ const Header = (searchQuery,setSearchQuery) => {
     const onSubmit = (e) => {
         history.push(`/${searchQuery}`);
         e.preventDefault();
-        // window.location.href = `/?s=${searchQuery}`;
+        // console.log(searchQuery);
+        // window.location.href = `/${searchQuery.searchQuery}`;
+
+        // window.location.origin = `/${searchQuery}`;
         // console.log(window.location.href);
 
     };
@@ -22,7 +25,7 @@ const Header = (searchQuery,setSearchQuery) => {
         <div className='headerContainer'>
             <img src="../ressources/icon-left-font.png" alt="Logo de Groupomania" />
             <form action="" className="searchInput" autoComplete='off' onSubmit={onSubmit}>
-                <input type="text" placeholder='Rechercher'   onInput={e => setSearchQuery(e.target.value)} name="s"/>
+                <input type="text" placeholder='Rechercher'   onInput={e => setSearchQuery(e.target.value)} name="search"/>
                 <div className="search-icon"><i className="fas fa-search "></i></div>
             </form>
            

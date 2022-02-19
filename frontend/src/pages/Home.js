@@ -36,9 +36,9 @@ const Home = () => {
     });
 };
 
-
+//  console.log(window.location.origin);
   const { search } = window.location;
-  const query = new URLSearchParams(search).get('s');
+  const query = new URLSearchParams(search).get('search');
   const [searchQuery, setSearchQuery] = useState(query || "");
   const filteredPosts = filterPosts(posts, searchQuery);
 

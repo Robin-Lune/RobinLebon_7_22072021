@@ -1,16 +1,22 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams,useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import axios from "axios";
 import Header from "../components/header";
 import Posts from "../components/post";
 
 const Account = () => {
+  const location = useLocation();
   useEffect(() => {
     getUserPage();
     getUser();
     getPosts();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [location]); // eslint-disable-line react-hooks/exhaustive-deps
+
+
+
+
+
 
   const ref = useRef();
   const token = JSON.parse(localStorage.token);
@@ -192,7 +198,8 @@ const Account = () => {
         <meta name="twitter:creator" content="@Groupomania_Robin_LEBON" />
       </Helmet>
 
-      <Header />
+      <Header/>
+
       <div className="Account-header">
         {showModifyUser ? (
           <div className="Account-header-right">

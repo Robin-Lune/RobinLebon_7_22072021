@@ -28,6 +28,8 @@ const Post = ({
   useEffect(() => {
     setNumberComments(totalComm);
     getLikes();
+    découpageURL(message);
+    découpageMessage(message);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const ref = useRef();
@@ -66,11 +68,35 @@ const Post = ({
   const [numberComments, setNumberComments] = useState(totalComm);
   const [comments, setComments] = useState([]);
   const [commentForm, setCommentForm] = useState("");
-  const [messagePost, setMessagePost] = useState(message);
+  const [Message, setMessage] = useState(message);
+  const [messagePost, setMessagePost] = useState("");
   const [modifyComm, setModifyComm] = useState(false);
   const [imagePostPreview, setImagePostPreview] = useState(image);
   const [imagePostUpload, setImagePostUpload] = useState();
   const [deleteImageStatus, setDeleteImageStatus] = useState(false);
+  const [URLmessage, setURLMessage] = useState(null);
+  console.log(URLmessage);
+
+  const découpageURL = (message) => {
+    if (message.includes("https://")) {
+      setURLMessage(message.split("https://")[1]);
+      return;
+    } else if (message.includes("http://")) {
+      setURLMessage(message.split("http://")[1]);
+      return;
+    }
+  };
+  const découpageMessage = (message) => {
+    if (message.includes("https://")) {
+      setMessagePost(message.split("https://")[0]);
+      return;
+    } else if (message.includes("http://")) {
+      setMessagePost(message.split("http://")[0]);
+      return;
+    } else {
+      setMessagePost(message);
+    }
+  };
 
   const toggleOptionsPost = () => {
     setShowOptionsPost(!showOptionsPost);
@@ -238,7 +264,7 @@ const Post = ({
     if (imagePostUpload) {
       data.append("image", imagePostUpload);
     }
-    data.append("message", messagePost);
+    data.append("message", Message);
     data.append("userId", userId);
     data.append("admin", admin);
     data.append("deleteImage", deleteImageStatus);
@@ -268,13 +294,13 @@ const Post = ({
     <div className={`post data-id="${id}`}>
       <div className="post-header">
         <NavLink to={`/account/${u_id}`} className="profile-link">
-        <div className="post-header-left">
-          <img src={authorPicture} alt="" className="profil-picture" />
-          <div className="exif-data">
-            <p className="author">{author}</p>
-            <p className="date">{timePassed(date)}</p>
+          <div className="post-header-left">
+            <img src={authorPicture} alt="" className="profil-picture" />
+            <div className="exif-data">
+              <p className="author">{author}</p>
+              <p className="date">{timePassed(date)}</p>
+            </div>
           </div>
-        </div>
         </NavLink>
         <div
           className={`post-header-right ${
@@ -314,8 +340,8 @@ const Post = ({
             </p>
             <input
               type="text"
-              value={messagePost}
-              onChange={(e) => setMessagePost(e.target.value)}
+              value={Message}
+              onChange={(e) => setMessage(e.target.value)}
               className="text-modifier"
             />
             {image !== null ? (
@@ -362,7 +388,26 @@ const Post = ({
           </form>
         ) : (
           <div className="body">
-            <p className="post-message">{messagePost}</p>
+            <p className="post-message">
+              {messagePost.split("https://" && "http://")[0]}
+            </p>
+            {URLmessage !== null ? (
+              <a href={`http://${URLmessage.split(" ")[0]}`} target="_blank">
+                <p className="post-message">{`${
+                  URLmessage.split(" ")[0]
+                }`}</p>
+              </a>
+            ) : (
+              ""
+            )}
+            {URLmessage !== null ? (
+              <p className="post-message">{`${URLmessage.split(" ")
+                .slice(1)
+                .join(" ")}`}</p>
+            ) : (
+              ""
+            )}
+
             {image !== null ? (
               <img className="post-image" src={image} alt="" />
             ) : (
@@ -404,14 +449,14 @@ const Post = ({
             <div className="comment ">
               <div className="comment-header">
                 <NavLink to={`/account/${Comm_uid}`} className="profile-link">
-                <div className="comment-header-left">
-                  <img src={Comm_picture} alt="" className="profil-picture" />
+                  <div className="comment-header-left">
+                    <img src={Comm_picture} alt="" className="profil-picture" />
 
-                  <div className="exif-data">
-                    <p className="author">{`${Comm_nom} ${Comm_prenom}`}</p>
-                    <p className="date">{timePassed(dateComm)}</p>
+                    <div className="exif-data">
+                      <p className="author">{`${Comm_nom} ${Comm_prenom}`}</p>
+                      <p className="date">{timePassed(dateComm)}</p>
+                    </div>
                   </div>
-                </div>
                 </NavLink>
                 <div
                   className={`comment-header-right ${
