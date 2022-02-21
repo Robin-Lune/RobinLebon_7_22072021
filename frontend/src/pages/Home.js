@@ -83,7 +83,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <main>
       <Helmet>
         <title>Accueil</title>
         <meta name="description" content="Page d'accueil de la palteforme Groupomania" />
@@ -103,7 +103,8 @@ const Home = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
          />
-      <div className="home-container">
+      <section className="home-container">
+        <h1 className="inactive">Bienvenue sur Groupomania</h1>
         <Poster infos={user} />
 
         {filteredPosts.map(post => (
@@ -129,8 +130,8 @@ const Home = () => {
             infos={user}
           />
         ))}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

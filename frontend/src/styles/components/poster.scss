@@ -6,8 +6,16 @@
   min-height: 100px;
   max-height: 300px;
   border-radius: 30px;
-  // border: 1px solid $dark-grey;
   margin: 20px 0 20px 0;
+
+
+  @include tablet-up {
+    width: 80%;
+  }
+  @include smartphone-up{
+    width: 97%;
+    min-width: 0;
+  }
 
   form {
     @include flex-dir(column, center, center);
@@ -89,7 +97,6 @@
 
 #submit-post {
   background-color: $color-primary;
-  color: $light-grey;
   font-size: 20px;
   font-weight: bold;
   border-radius: 30px;

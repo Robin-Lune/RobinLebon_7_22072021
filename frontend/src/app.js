@@ -7,7 +7,7 @@ import Messages from "./pages/Messages";
 
 function App() {
   return (
-    <div>
+    <div className="Router">
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

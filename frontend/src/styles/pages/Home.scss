@@ -4,7 +4,12 @@
 
 .home-container {
   @include flex-dir(column, center, center);
-  margin: auto;
   width: 100%;
   height: 100%;
+  @include tablet-up {
+    margin-top: 80px;
+  }
+  @include smartphone-up {
+    margin-top: 80px;
+  }
 }

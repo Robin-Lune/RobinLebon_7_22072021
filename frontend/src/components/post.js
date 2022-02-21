@@ -291,11 +291,11 @@ const Post = ({
   };
 
   return (
-    <div className={`post data-id="${id}`}>
+    <article className={`post data-id="${id}`}>
       <div className="post-header">
-        <NavLink to={`/account/${u_id}`} className="profile-link">
+        <NavLink to={`/account/${u_id}`} className="profile-link" >
           <div className="post-header-left">
-            <img src={authorPicture} alt="" className="profil-picture" />
+            <img src={authorPicture} alt="Portrait l'auteur de la publication" className="profil-picture" />
             <div className="exif-data">
               <p className="author">{author}</p>
               <p className="date">{timePassed(date)}</p>
@@ -338,16 +338,18 @@ const Post = ({
             <p className="abort-edit" onClick={cancelEdit}>
               Annuler
             </p>
+            <label htmlFor="text-modifier" className="inactive"> Message</label>
             <input
               type="text"
               value={Message}
               onChange={(e) => setMessage(e.target.value)}
               className="text-modifier"
+              id="text-modifier"
             />
             {image !== null ? (
               <div className="image-upload">
                 <label htmlFor="file-input">
-                  <img src={imagePostPreview} className="post-image" />
+                  <img src={imagePostPreview} className="post-image" alt="" />
                   <i className="fa-solid fa-file-image"></i>
                 </label>
 
@@ -365,7 +367,8 @@ const Post = ({
             ) : (
               <div className="image-upload">
                 <label htmlFor="file-input">
-                  <img src={imagePostPreview} className="post-image" />
+                  {imagePostPreview ? <img src={imagePostPreview} className="post-image" alt="prévisualisation de l'image de la publication" /> : <div className="image-palceholder"></div> }
+                  
                   <i className="fa-solid fa-file-image"></i>
                 </label>
 
@@ -409,7 +412,7 @@ const Post = ({
             )}
 
             {image !== null ? (
-              <img className="post-image" src={image} alt="" />
+              <img className="post-image" src={image} alt="image de la publication" />
             ) : (
               ""
             )}
@@ -494,6 +497,7 @@ const Post = ({
               alt="profile utilisateur"
               className="profil-picture"
             />
+            <label htmlFor="input-comment" className="inactive">Commentaire</label>
             <input
               type="text"
               placeholder="Ajouter un commentaire"
@@ -531,7 +535,7 @@ const Post = ({
           : ""}
       </div>
       {/* MODIFY POST  */}
-    </div>
+    </article>
   );
 };
 

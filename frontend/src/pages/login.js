@@ -70,7 +70,7 @@ function Login() {
   };
 
   return (
-    <div className="mainContainer">
+    <main className="mainContainer">
       <Helmet>
         <title>Login</title>
         <meta name="description" content="Page de connexion de la palteforme Groupomania" />
@@ -88,10 +88,10 @@ function Login() {
       </Helmet>
 
       <div className={`bgContainer ${isActive ? "" : "blured"}`}>
-        <img src="./ressources/icon-above-font.png" alt="" />
-        <div className="loginContainer">
+        <img src="./ressources/icon-above-font.png" alt="Logo de l'entreprise Groupomania" />
+        <section className="loginContainer">
           <form action="" onSubmit={handleLogin}>
-            <label> Email </label>
+            <label htmlFor="email"> Email </label>
             <input
               type="text"
               placeholder="Email"
@@ -99,11 +99,12 @@ function Login() {
               id="email"
               onChange={(e) => setEmail(e.target.value)}
             />
-            <label> Mot de passe </label>
+            <label htmlFor="password1"> Mot de passe </label>
             <input
               type="password"
               placeholder="Password"
-              name="password"
+              name="password1"
+              id="password1"
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="error" id="loginError"></div>
@@ -117,7 +118,7 @@ function Login() {
               S'inscrire
             </p>
           </div>
-        </div>
+        </section>
       </div>
 
       <div className={`signupPopup ${isActive ? "" : "active"}`}>
@@ -125,11 +126,11 @@ function Login() {
           <i className="far fa-times-circle"></i>
         </div>
 
-        <div className="signupPopupContainer">
-          <h2>Inscription</h2>
+        <section className="signupPopupContainer">
+          <h1>Inscription</h1>
           <form action="" onSubmit={handleSignup}>
             <div className="headerpopup">
-              <label htmlFor="Nom"></label>
+              <label htmlFor="nom">Nom</label>
               <input
                 type="text"
                 placeholder="Nom"
@@ -137,7 +138,7 @@ function Login() {
                 id="nom"
                 onChange={(e) => setNom(e.target.value)}
               />
-              <label htmlFor="Prenom"></label>
+              <label htmlFor="prenom">Prenom</label>
               <input
                 type="text"
                 placeholder="Prenom"
@@ -147,19 +148,21 @@ function Login() {
               />
             </div>
 
-            <label> Email </label>
+            <label htmlFor="email2" > Email </label>
             <input
               type="text"
               placeholder="Email"
-              name="email"
+              name="email2"
+              id="email2"
               onChange={(e) => setEmail(e.target.value)}
             />
             <div className="error" id="emailError"></div>
-            <label> Mot de passe </label>
+            <label htmlFor="password2"> Mot de passe </label>
             <input
               type="password"
               placeholder="Mot de passe"
-              name="password1"
+              name="password2"
+              id="password2"
               onChange={(e) => setPassword(e.target.value)}
             />
             <div className="error" id="passwordError"></div>
@@ -167,10 +170,10 @@ function Login() {
             <input type="password" placeholder=" Confirmer le mot de passe" name="password2" /> */}
             <input type="submit" className="submitSignup" value="S'inscrire" />
           </form>
-        </div>
+        </section>
       </div>
       <div className={`background ${isActive ? "" : "active"}`}></div>
-    </div>
+    </main>
   );
 }
 

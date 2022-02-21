@@ -5,6 +5,12 @@
     justify-content: $justify; 
 }
 
+@mixin tablet-up {
+    @media screen and (min-width: 530px) and (max-width: 825px) { @content; }
+};
+@mixin smartphone-up {
+    @media screen and (max-width: 530px) { @content; }
+};
 $color-primary: #da512f;
 $color-secondary: #c94723;
 $color-tertiary: #912e12;

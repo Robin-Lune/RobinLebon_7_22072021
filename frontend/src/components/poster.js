@@ -63,7 +63,8 @@ const handlePost = async (e) => {
             <form action="" onSubmit={handlePost}> 
                 <div className="poster-header">
                         <img src={infos.infos.imageprofile} alt="profil" className="profil-picture"/>
-                    <input type="text" name="text-post" className="text-post" placeholder={`exprimez-vous ${infos.infos.prenom} `} onChange={(e) => setMessage(e.target.value)}/>
+                        <label htmlFor="text-post" className="inactive">Message de la pàublication</label>
+                    <input type="text" name="text-post" className="text-post" id="text-post" placeholder={`exprimez-vous ${infos.infos.prenom} `} onChange={(e) => setMessage(e.target.value)}/>
                 </div>
                 <div className="poster-footer">
                     <label htmlFor="file-input-poster">
