@@ -130,6 +130,10 @@
       border: 2px solid $color-complementary;
     }
   }
+  .form-error{
+    border: solid red 2px;
+  }
+  
   .image-uploader {
     position: relative;
     .fa-file-image {

@@ -75,7 +75,7 @@ const Post = ({
   const [imagePostUpload, setImagePostUpload] = useState();
   const [deleteImageStatus, setDeleteImageStatus] = useState(false);
   const [URLmessage, setURLMessage] = useState(null);
-  console.log(URLmessage);
+  // console.log(URLmessage);
 
   const découpageURL = (message) => {
     if (message.includes("https://")) {
@@ -123,6 +123,7 @@ const Post = ({
     setMessagePost(message);
     setImagePostPreview(image);
     setImagePostUpload();
+    setDeleteImageStatus(false);
   };
 
   const getLikes = async () => {

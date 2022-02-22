@@ -30,6 +30,11 @@ const pictureLoad = (e) => {
 
 };
 
+const deleteImage = () => {
+    setFile(undefined);
+    shwImage.removeChild(document.getElementById('my-image'));
+};
+
 //  save Post in database
 const handlePost = async (e) => {
     e.preventDefault();
@@ -76,6 +81,8 @@ const handlePost = async (e) => {
                   
                     <div id="image-container"></div>
                 </div>
+                { file ? <p className="delete" onClick={deleteImage}>Supprimer l'image</p> : null }
+                
                 <button type="submit" id="submit-post" disabled={message === "" && file === undefined }>
                 Envoyer
                 </button>

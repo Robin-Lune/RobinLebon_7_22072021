@@ -5,9 +5,10 @@ const Header = (searchQuery, setSearchQuery) => {
   const token = JSON.parse(localStorage.token);
   const [burgerStatus, setBurgerStatus] = useState(false);
 
+  // TOGGLERS
   const toggleBurger = () => {
     setBurgerStatus(!burgerStatus);
-    console.log(burgerStatus);
+    // console.log(burgerStatus);
   };
 
   const handleLogout = () => {
@@ -25,6 +26,23 @@ const Header = (searchQuery, setSearchQuery) => {
     // window.location.origin = `/${searchQuery}`;
     // console.log(window.location.href);
   };
+// BURGER MENU ANIMATION
+  const burgerMiddle = document.getElementById("burger-middle");
+  const burgerTop = document.getElementById("burger-top");
+  const burgerBottom= document.getElementById("burger-bottom");
+  
+  const transition = () => { 
+    if (burgerStatus) {
+      burgerTop.style.transform = "rotate(0deg) translateX(0) translateY(0)";
+      burgerMiddle.style.opacity = "1";
+      burgerBottom.style.transform = "rotate(0deg) translateX(0)translateY(0)";
+    }else {
+      burgerTop.style.transform = "rotate(-225deg) translateX(3px) translateY(-3px)";
+      burgerMiddle.style.opacity = "0";
+      burgerBottom.style.transform = "rotate(225deg) translateX(4.5px)translateY(4.5px)";
+      
+    }
+  }
 
   return (
     <header className="headerContainer">
@@ -85,8 +103,13 @@ const Header = (searchQuery, setSearchQuery) => {
           </li>
         </ul>
       </nav>
-      <div className="burgerContainer" onClick={toggleBurger}>
-        <div className="burger"  ></div>
+      <div className="burgerContainer" onClick ={function (event) {
+                  toggleBurger();
+                  transition();
+                }} >
+        <div className="burger-top" id="burger-top"></div>
+        <div className="burger-middle" id="burger-middle" ></div>
+        <div className="burger-bottom" id="burger-bottom"></div>
       </div>
     </header>
   );

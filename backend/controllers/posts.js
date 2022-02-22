@@ -27,13 +27,13 @@ exports.createPost = (req, res, next) => {
     }`;
 
     console.log(imageurl);
-    const newPostImage = {
+    const newPostWithImage = {
       message: req.body.message,
       utilisateur_id: req.body.userId,
       imageurl: imageurl,
     };
     const sql = "INSERT INTO post SET ?";
-    db.query(sql, newPostImage, (err, result) => {
+    db.query(sql, newPostWithImage, (err, result) => {
       if (err) throw err;
       res.status(200).json({ message: "Poste créé!" });
     });

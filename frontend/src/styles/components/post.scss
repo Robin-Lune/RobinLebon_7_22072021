@@ -8,22 +8,21 @@
   border-radius: 10px;
   margin: 20px auto 20px auto;
   padding: 15px;
-  @include smartphone-up{
+  @include smartphone-up {
     width: 95%;
     min-width: 0;
   }
 }
 
-
 .profil-picture {
-  object-fit:cover;
+  object-fit: cover;
   border-radius: 50%;
   height: 40px;
   width: 40px;
   margin: 0 10px 0 0;
 }
 
-.profile-link{
+.profile-link {
   text-decoration: none;
 }
 
@@ -31,7 +30,7 @@
   @include flex-dir(row, center, space-between);
   width: 100%;
   margin: 0 0 10px 0;
-  
+
   .post-header-left {
     @include flex-dir(row, center, flex-start);
   }
@@ -71,7 +70,7 @@
   right: 0;
   z-index: 100;
   .delete {
-    color: #A10303;
+    color: #a10303;
     cursor: pointer;
     &:hover {
       color: rgb(212, 25, 25);
@@ -105,7 +104,7 @@
     .abort-edit {
       width: 65px;
       text-align: center;
-      color: #A10303;
+      color: #a10303;
       font-weight: bold;
       cursor: pointer;
       margin: 0 10px 10px auto;
@@ -116,10 +115,10 @@
     .delete-image {
       width: auto;
       text-align: center;
-      color: #A10303;
+      color: #a10303;
       font-weight: bold;
       cursor: pointer;
-      margin: 10px auto ;
+      margin: 10px auto;
       &:hover {
         color: rgb(212, 25, 25);
       }
@@ -159,20 +158,20 @@
         color: $color-complementary;
       }
     }
-    .image-palceholder{
+    .image-palceholder {
       height: 100px;
       width: auto;
       cursor: pointer;
-      border: solid 1px $light-grey ;
+      border: solid 1px $light-grey;
     }
 
     img {
       min-height: 100px;
       z-index: 1;
       cursor: pointer;
-      filter: grayscale(.4);
-      filter: blur(.8px);
-      opacity: .7;
+      filter: grayscale(0.4);
+      filter: blur(0.8px);
+      opacity: 0.7;
     }
 
     .btn-modify {
@@ -200,7 +199,6 @@
     overflow-wrap: break-word;
   }
   .post-image {
-    
     height: auto;
     width: 100%;
     margin: auto;
@@ -360,7 +358,7 @@
     background-color: $light-grey;
     border: none;
     outline: none;
-    padding-right: 10px ;
+    padding-right: 10px;
 
     cursor: pointer;
     &:hover {

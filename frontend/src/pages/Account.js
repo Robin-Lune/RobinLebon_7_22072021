@@ -4,6 +4,7 @@ import { Helmet } from "react-helmet";
 import axios from "axios";
 import Header from "../components/header";
 import Posts from "../components/post";
+import { emailValidation, lettersAndSpaceCheck } from "../Utils/utils";
 
 const Account = () => {
   const location = useLocation();
@@ -16,7 +17,6 @@ const Account = () => {
   const ref = useRef();
   const token = JSON.parse(localStorage.token);
   const { id } = useParams();
-  // console.log(id);
   const [userPage, setUserPage] = useState({});
   const [user, setUser] = useState({});
   const [posts, setPosts] = useState([]);
@@ -65,7 +65,8 @@ const Account = () => {
       document.removeEventListener("mousedown", checkIfClickedOutside);
     };
   }, [showOptions]);
-  //get User infos
+
+  //GERT CURRENT USER INFOS
   const getUser = async () => {
     await axios({
       method: "GET",
@@ -80,7 +81,7 @@ const Account = () => {
       });
   };
 
-  //get User Page infos
+  //GET USER PAGE INFOS
   const getUserPage = async () => {
     await axios({
       method: "GET",
@@ -99,7 +100,7 @@ const Account = () => {
       });
   };
 
-  //get Posts
+  //get USER PAGE POST
   const getPosts = async () => {
     await axios({
       method: "GET",
@@ -113,31 +114,54 @@ const Account = () => {
         console.log(err.response);
       });
   };
-
+// MODIFY USER PAGE INFOS
   const ModifyInfos = async (e) => {
     e.preventDefault();
-    let data = new FormData();
-    if (imageProfileUpload) {
-      data.append("profil_image", imageProfileUpload);
+    const formlastName = document.getElementById("lastname");
+    const formfirstName = document.getElementById("firstname");
+    const formemail = document.getElementById("email");
+    formemail.className = "input-text";
+    formlastName.className = "input-text";
+    formfirstName.className = "input-text";
+
+    if (!emailValidation(email)) {
+      formemail.className = "input-text form-error";
     }
-    data.append("userId", user.id);
-    data.append("admin", user.admin);
-    data.append("nom", lastName);
-    data.append("prenom", firstName);
-    data.append("email", email);
-    await axios({
-      method: "PUT",
-      url: `http://localhost:3500/api/auth/${id}`,
-      data: data,
-    })
-      .then((res) => {
-        // console.log(res.data);
-        setShowModifyUser(false);
-        getUserPage();
+    if (!lettersAndSpaceCheck(lastName)) {
+      formlastName.className = "input-text form-error";
+    }
+    if (!lettersAndSpaceCheck(firstName)) {
+      formfirstName.className = "input-text form-error";
+    }
+
+    if (
+      emailValidation(email) &&
+      lettersAndSpaceCheck(lastName) &&
+      lettersAndSpaceCheck(firstName)
+    ) {
+      let data = new FormData();
+      if (imageProfileUpload) {
+        data.append("profil_image", imageProfileUpload);
+      }
+      data.append("userId", user.id);
+      data.append("admin", user.admin);
+      data.append("nom", lastName);
+      data.append("prenom", firstName);
+      data.append("email", email);
+      await axios({
+        method: "PUT",
+        url: `http://localhost:3500/api/auth/${id}`,
+        data: data,
       })
-      .catch((err) => {
-        console.log(err.response);
-      });
+        .then((res) => {
+          // console.log(res.data);
+          setShowModifyUser(false);
+          getUserPage();
+        })
+        .catch((err) => {
+          console.log(err.response);
+        });
+    }
   };
 
   const pictureChange = (e) => {
@@ -285,7 +309,7 @@ const Account = () => {
                 {userPage.admin === 1 ? "  (Admin)" : ""}
               </h1>
               <p>{email}</p>
-              <p>Publications = {posts.length}</p>
+              <p>Publications: {posts.length}</p>
             </div>
           </div>
         )}
