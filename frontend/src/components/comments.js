@@ -43,7 +43,6 @@ const Comments = (commentaire, nom) => {
       url: `http://localhost:3500/api/posts/comments/${comm_id}`,
       data: {
         userId,
-        admin,
       },
     })
       .then((res) => {

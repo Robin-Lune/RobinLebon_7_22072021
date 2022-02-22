@@ -144,7 +144,6 @@ const Account = () => {
         data.append("profil_image", imageProfileUpload);
       }
       data.append("userId", user.id);
-      data.append("admin", user.admin);
       data.append("nom", lastName);
       data.append("prenom", firstName);
       data.append("email", email);

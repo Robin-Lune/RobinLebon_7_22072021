@@ -220,7 +220,6 @@ const Post = ({
       data: {
         postId,
         userId,
-        admin,
       },
     })
       .then((res) => {
@@ -239,7 +238,6 @@ const Post = ({
       url: `http://localhost:3500/api/posts/comments/${comm_id}`,
       data: {
         userId,
-        admin,
       },
     })
       .then((res) => {
@@ -267,7 +265,6 @@ const Post = ({
     }
     data.append("message", Message);
     data.append("userId", userId);
-    data.append("admin", admin);
     data.append("deleteImage", deleteImageStatus);
 
     await axios({

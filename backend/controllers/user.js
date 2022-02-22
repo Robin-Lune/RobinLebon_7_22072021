@@ -94,75 +94,20 @@ exports.getUserPosts = (req, res, next) => {
 exports.modifyUser = (req, res, next) => {
   const userPageId = req.params.id;
   const userId = req.body.userId;
-  const admin = req.body.admin;
   const nom = req.body.nom;
   const prenom = req.body.prenom;
   const email = req.body.email;
   const file = req.file;
   const sqlInfos = `SELECT nom,prenom,id,email,imageProfile FROM utilisateur WHERE id=${userPageId}`;
+  const sqlAdminInfos = `SELECT admin FROM utilisateur WHERE id=${userId}`;
+  let adminCheckout = null;
 
-  if (admin === "1") {
-    console.log("admin");
-    db.query(sqlInfos, (err, result) => {
+  let query = db.query(sqlAdminInfos, (err, result) => {
+    if (err) throw err;
+    adminCheckout = result[0].admin;
+    let query = db.query(sqlInfos, (err, result) => {
       if (err) throw err;
-
-      if (file) {
-        const new_profil_image_url = `${req.protocol}://${req.get(
-          "host"
-        )}/images/profils/${req.file.filename}`;
-        oldFileName = result[0].imageProfile.split("/images/profils/")[1];
-        if (oldFileName !== "avatar.png") {
-          fs.unlink(`images/profils/${oldFileName}`, () => {
-            if (err) console.log(err);
-            else {
-              console.log("Ancienne image de profile supprimée");
-            }
-          });
-        }
-        const newUserInfos = {
-          nom: nom,
-          prenom: prenom,
-          email: email,
-          imageProfile: new_profil_image_url,
-        };
-        const sql = `UPDATE utilisateur SET ? WHERE id=${userPageId}`;
-        let query = db.query(sql, newUserInfos, (err, result) => {
-          if (err) {
-            res.status(500).json({
-              error: "Erreur lors de la modification de l'utilisateur",
-            });
-            throw err;
-          }
-          res.status(200).json({ message: "Utilisateur modifié!" });
-          console.log("utilisateur modifié");
-        });
-      } else {
-        const newUserInfos = {
-          nom: nom,
-          prenom: prenom,
-          email: email,
-        };
-        const sql = `UPDATE utilisateur SET ? WHERE id=${userPageId}`;
-        let query = db.query(sql, newUserInfos, (err, result) => {
-          if (err) {
-            res.status(500).json({
-              error: "Erreur lors de la modification de l'utilisateur",
-            });
-            throw err;
-          }
-          res.status(200).json({ message: "Utilisateur modifié!" });
-          console.log("utilisateur modifié");
-        });
-      }
-    });
-  } else {
-    console.log("user");
-    db.query(sqlInfos, (err, result) => {
-      if (err) throw err;
-      else if (`${result[0].id}` !== `${userId}`) {
-        res.status(401).json({ error: "Vous n'avez pas le droit" });
-        return;
-      } else {
+      if (userId === `${result[0].id}` || adminCheckout === 1) {
         if (file) {
           const new_profil_image_url = `${req.protocol}://${req.get(
             "host"
@@ -211,9 +156,11 @@ exports.modifyUser = (req, res, next) => {
             console.log("utilisateur modifié");
           });
         }
+      } else {
+        return res.status(403).json({ error: "Accès refusé" });
       }
     });
-  }
+  });
 };
 
 exports.deleteUser = (req, res, next) => {
@@ -221,42 +168,36 @@ exports.deleteUser = (req, res, next) => {
   const userId = req.body.userId;
   const admin = req.body.admin;
   const sqlInfos = `SELECT id ,imageProfile FROM utilisateur WHERE id=${userPageId}`;
-  if (admin === 1) {
-    console.log("admin");
-    db.query(sqlInfos, (err, result) => {
-      if (err) {
-        res.status(500).json({
-          error: "Erreur lors de la suppression de l'utilisateur",
-        });
-        throw err;
-      }
-      const sql = `DELETE u.*,p.*, c.*,l.* FROM utilisateur u LEFT JOIN post p ON(p.utilisateur_id = u.id) LEFT JOIN comments c ON(c.utilisateur_id = u.id) LEFT JOIN like_post l ON (l.lp_utilisateur_id = u.id) WHERE u.id = ${userPageId};`;
-      let query = db.query(sql, (err, result) => {
-        if (err) throw err;
-        res.status(200).json({ message: "Utilisateur supprimé!" });
-        console.log("utilisateur supprimé");
-      });
-    });
-  } else {
-    console.log("user");
-    db.query(sqlInfos, (err, result) => {
-      if (err) {
-        res.status(500).json({
-          error: "Erreur lors de la suppression de l'utilisateur",
-        });
-        throw err;
-      } else if (`${result[0].id}` !== `${userId}`) {
-        res.status(401).json({ error: "Vous n'avez pas le droit" });
-        return;
-      } else {
+  const sqlAdminInfos = `SELECT admin FROM utilisateur WHERE id=${userId}`;
+  let adminCheckout = null;
+
+  let query = db.query(sqlAdminInfos, (err, result) => {
+    if (err) throw err;
+    adminCheckout = result[0].admin;
+    let query = db.query(sqlInfos, (err, result) => {
+      if (err) throw err;
+      if (userId === result[0].id || adminCheckout === 1) {
+        const oldFileName = result[0].imageProfile.split("/images/profils/")[1];
+
+        if (oldFileName !== "avatar.png") {
+          fs.unlink(`images/profils/${oldFileName}`, () => {
+            if (err) console.log(err);
+            else {
+              console.log("Image de profile supprimée");
+            }
+          });
+        }
+
         const sql = `DELETE u.*,p.*, c.*,l.* FROM utilisateur u LEFT JOIN post p ON(p.utilisateur_id = u.id) LEFT JOIN comments c ON(c.utilisateur_id = u.id) LEFT JOIN like_post l ON (l.lp_utilisateur_id = u.id) WHERE u.id = ${userPageId};`;
         let query = db.query(sql, (err, result) => {
           if (err) throw err;
           res.status(200).json({ message: "Utilisateur supprimé!" });
           console.log("utilisateur supprimé");
         });
+      } else {
+        return res.status(403).json({ error: "Accès refusé" });
       }
     });
-  }
+  });
   console.log(`userId: ${userId} admin: ${admin} userPageId: ${userPageId}`);
 };
