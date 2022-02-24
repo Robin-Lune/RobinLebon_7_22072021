@@ -143,7 +143,6 @@ const Account = () => {
       if (imageProfileUpload) {
         data.append("profil_image", imageProfileUpload);
       }
-      data.append("userId", user.id);
       data.append("nom", lastName);
       data.append("prenom", firstName);
       data.append("email", email);
@@ -176,17 +175,10 @@ const Account = () => {
     await axios({
       method: "DELETE",
       url: `http://localhost:3500/api/auth/${id}`,
-      data: {
-        userId: user.id,
-        admin: user.admin,
-      },
     })
       .then((res) => {
         // console.log(res.data);
         if (user.admin === 1) {
-          setShowDeleteUser(false);
-
-          getUserPage();
           window.location.href = "/";
         } else {
           localStorage.removeItem("token");
