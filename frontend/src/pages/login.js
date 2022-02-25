@@ -18,6 +18,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -225,14 +231,19 @@ function Login() {
             />
             <div className="error" id="emailError"></div>
             <label htmlFor="password2"> Mot de passe </label>
-            <input
-              type="password"
-              placeholder="Mot de passe"
-              name="password2"
-              id="password2"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="password-container">    
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Mot de passe"
+                name="password2"
+                id="password2"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <i className={`fa-solid fa-eye ${showPassword ? "showPassword" : ""}`} onClick ={function (event) {
+                  toggleShowPassword();
+                }} ></i>
+              </div>
             <div className="error" id="passwordError"></div>
             {/* <label for=""> Confirmer le mot de passe </label>
             <input type="password" placeholder=" Confirmer le mot de passe" name="password2" /> */}
