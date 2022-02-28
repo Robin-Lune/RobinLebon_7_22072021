@@ -65,12 +65,21 @@
           font-weight: bold;
           color: #da512f;
         }
+        @include smartphone-up{
+          flex-direction: column;
+        }
+        @include tablet-up{
+          flex-direction: column;
+        }
       }
       .prenom-container {
         @include flex-dir(column, center, center);
+        margin: 5px;
       }
       .nom-container {
         @include flex-dir(column, center, center);
+        margin: 5px;
+
       }
 
       input {
