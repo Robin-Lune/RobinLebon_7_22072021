@@ -38,13 +38,11 @@ const deleteImage = () => {
 //  save Post in database
 const handlePost = async (e) => {
     e.preventDefault();
-    let token = JSON.parse(localStorage.token);
     if (file) console.log(file);
     console.log(message)
     const data = new FormData();
     if (file) data.append('image', file);
     data.append('message', message);
-    data.append('userId', token.userId);
 
 
     await axios({
