@@ -6,7 +6,7 @@
 
 # testing
 /coverage
-
+**/images/posts/*
 **/images/profils/*
 !images/posts/.gitkeep
 !images/profils/.gitkeep
