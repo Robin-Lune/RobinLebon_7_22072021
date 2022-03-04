@@ -24,7 +24,7 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-
+  // function to handle signup form
   const handleSignup = async (e) => {
     e.preventDefault();
     const emailError = document.getElementById("emailError");
