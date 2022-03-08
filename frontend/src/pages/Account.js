@@ -307,7 +307,7 @@ const Account = () => {
 
         <div
           className={`Account-header-options ${
-            userPage.id === user.id || user.admin === 1 ? "active" : "inactive"
+            userPage.UID === user.UID || user.admin === 1 ? "active" : "inactive"
           }`}
           ref={ref}
         >
