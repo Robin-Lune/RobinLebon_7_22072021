@@ -58,7 +58,7 @@ function Login() {
     ) {
       await axios({
         method: "POST",
-        url: "http://localhost:3500/api/auth/signup",
+        url:`${process.env.REACT_APP_BACKHOST}/api/auth/signup`,
         data: {
           email: email,
           password: password,
@@ -103,7 +103,7 @@ function Login() {
 
     axios({
       method: "POST",
-      url: "http://localhost:3500/api/auth/login",
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/login`,
       data: {
         email: email,
         password: password,

@@ -70,7 +70,7 @@ const Account = () => {
   const getUser = async () => {
     await axios({
       method: "GET",
-      url: `http://localhost:3500/api/auth/${token.userId}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/${token.userId}`,
     })
       .then((res) => {
         // console.log(res.data[0]);
@@ -85,7 +85,7 @@ const Account = () => {
   const getUserPage = async () => {
     await axios({
       method: "GET",
-      url: `http://localhost:3500/api/auth/${id}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/${id}`,
     })
       .then((res) => {
         // console.log(res.data[0]);
@@ -104,7 +104,7 @@ const Account = () => {
   const getPosts = async () => {
     await axios({
       method: "GET",
-      url: `http://localhost:3500/api/auth/${id}/posts`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/${id}/posts`,
     })
       .then((res) => {
         // console.log(res.data);
@@ -148,7 +148,7 @@ const Account = () => {
       data.append("email", email);
       await axios({
         method: "PUT",
-        url: `http://localhost:3500/api/auth/${id}`,
+        url: `${process.env.REACT_APP_BACKHOST}/api/auth/${id}`,
         data: data,
       })
         .then((res) => {
@@ -174,7 +174,7 @@ const Account = () => {
     e.preventDefault();
     await axios({
       method: "DELETE",
-      url: `http://localhost:3500/api/auth/${id}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/${id}`,
     })
       .then((res) => {
         // console.log(res.data);

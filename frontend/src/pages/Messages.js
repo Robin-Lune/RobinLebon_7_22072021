@@ -6,6 +6,7 @@ const Messages = () => {
         <div>
             <Header/>
             <h2>MESSAGES</h2>
+            <h3>Work In Progress ...</h3>
         </div>
     );
 };

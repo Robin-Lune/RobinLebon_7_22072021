@@ -129,7 +129,7 @@ const Post = ({
   const getLikes = async () => {
     await axios({
       method: "GET",
-      url: `http://localhost:3500/api/posts/${postId}/like`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/${postId}/like`,
     })
       .then((res) => {
         for (let i = 0; i < res.data.length; i++) {
@@ -147,7 +147,7 @@ const Post = ({
   const handleLike = async () => {
     await axios({
       method: "POST",
-      url: `http://localhost:3500/api/posts/${id}/like`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/${id}/like`,
       data: {
         postId,
         userId,
@@ -177,7 +177,7 @@ const Post = ({
     }
 
     await axios
-      .get(`http://localhost:3500/api/posts/${postId}/comments`)
+      .get(`${process.env.REACT_APP_BACKHOST}/api/posts/${postId}/comments`)
       .then((res) => {
         // console.log(res.data);
         setComments(res.data);
@@ -193,7 +193,7 @@ const Post = ({
 
     await axios({
       method: "POST",
-      url: `http://localhost:3500/api/posts/${postId}/comments`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/${postId}/comments`,
       data: {
         postId,
         commentaire: commentForm,
@@ -215,7 +215,7 @@ const Post = ({
   const deletePost = async () => {
     await axios({
       method: "DELETE",
-      url: `http://localhost:3500/api/posts/${postId}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/${postId}`,
       data: {
         postId,
       },
@@ -233,7 +233,7 @@ const Post = ({
   const deleteComm = async () => {
     await axios({
       method: "DELETE",
-      url: `http://localhost:3500/api/posts/comments/${comm_id}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/comments/${comm_id}`,
       data: {
         userId,
       },
@@ -266,7 +266,7 @@ const Post = ({
 
     await axios({
       method: "PUT",
-      url: `http://localhost:3500/api/posts/${postId}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/${postId}`,
       data,
     })
       .then((res) => {

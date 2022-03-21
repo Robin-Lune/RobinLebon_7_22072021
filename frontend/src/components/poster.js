@@ -47,7 +47,7 @@ const handlePost = async (e) => {
 
     await axios({
       method: "POST",
-      url: "http://localhost:3500/api/posts/",
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/`,
       data,
       })
       .then((res) => {

@@ -55,7 +55,7 @@ const Home = () => {
   const getAllPosts = async () => {
     await axios({
       method: "GET",
-      url: "http://localhost:3500/api/posts/",
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/`,
     })
       .then((res) => {
         setPosts(res.data);
@@ -71,7 +71,7 @@ const Home = () => {
 
     await axios({
       method: "GET",
-      url: `http://localhost:3500/api/auth/${token.userId}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/auth/${token.userId}`,
     })
       .then((res) => {
         // console.log(res.data[0]);

@@ -40,7 +40,7 @@ const Comments = (commentaire, nom) => {
    const deleteComm = async () => {
     await axios({
       method: "DELETE",
-      url: `http://localhost:3500/api/posts/comments/${comm_id}`,
+      url: `${process.env.REACT_APP_BACKHOST}/api/posts/comments/${comm_id}`,
       data: {
         userId,
       },
