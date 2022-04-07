@@ -43,7 +43,7 @@
   .exif-data {
     @include flex-dir(column, flex-start, center);
     height: 40px;
-    width: 100%px;
+    width: 100px;
     color: $light-grey;
   }
   .author {
@@ -95,6 +95,8 @@
   height: 100%;
   color: black;
   .body {
+    display: flex;
+    flex-direction: column;
     width: 100%;
   }
   form {
@@ -200,9 +202,9 @@
   }
   .post-image {
     height: auto;
-    width: 100%;
-    margin: auto;
-    margin-bottom: 10px;
+    max-height: 700px;
+    max-width: 100%;
+    margin: 0 auto 10px auto;
   }
 }
 
@@ -313,7 +315,7 @@
     .exif-data {
       @include flex-dir(column, flex-start, center);
       height: 40px;
-      width: 100%px;
+      width: 100px;
       color: $light-grey;
     }
     .author {
