@@ -2,7 +2,8 @@
 
 Social Network simulation for a fictional Brand.
 
-Voici le lien vers le site en "live", laissez un pti mot ça me fera plaisir ;) 
+There's a link to the "live" website. Leave me a message, it will please me! 
+
 https://groupomania.robin-lebon.com/
 
 ## Installation
