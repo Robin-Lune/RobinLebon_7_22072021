@@ -2,7 +2,7 @@
 
 Social Network simulation for a fictional Brand.
 
-There's a link to the "live" website. Leave me a message, it will please me! 
+There's a link to the "live" website. Leave me a message, it will make me happy ;)! 
 
 https://groupomania.robin-lebon.com/
 
